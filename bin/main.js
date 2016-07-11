@@ -33,11 +33,12 @@ if (shell.grep('.github_env', '.gitignore').stdout.indexOf('.github_env') < 0) {
 
 function publisItemAsReleaseToGithub(item) {
   var githubClient = new GithubClient(REPO_FULLNAME, TOKEN);
-  var parts = item.split('\n', 3);
+  var parts = item.split('\n');
   var tagName = parts[0].replace(/#/g, '').trim();
   var releaseTitle = parts[1].replace(/#/g, '').trim();
-  if (parts[2]) {
-    githubClient.publishRelease(tagName, releaseTitle, parts[2]);
+
+  if (parts.length > 2) {
+    githubClient.publishRelease(tagName, releaseTitle, parts.slice(2).join('\n'));
   } else {
     githubClient.publishRelease(tagName, releaseTitle);
   }
