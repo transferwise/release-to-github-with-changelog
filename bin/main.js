@@ -8,7 +8,7 @@ var gitUtils = require('./git-utils');
 var messages = require('./messages');
 var GithubClient = require('./github-client');
 
-var SEPARATOR = '\n=-=-=-=-=\n\n';
+var SEPARATOR = '<!-- -->';
 
 var REPO_FULLNAME = utils.getRepoFullnameFromPackage();
 var GITHUB_ENV_FILE = '.github_env';
@@ -34,8 +34,8 @@ if (shell.grep('.github_env', '.gitignore').stdout.indexOf('.github_env') < 0) {
 function publisItemAsReleaseToGithub(item) {
   var githubClient = new GithubClient(REPO_FULLNAME, TOKEN);
   var parts = item.split('\n');
-  var tagName = parts[0].replace(/#/g, '').trim();
-  var releaseTitle = parts[1].replace(/#/g, '').trim();
+  var tagName = parts[0].trim().replace(/#/g, '').trim();
+  var releaseTitle = parts[1].trim().replace(/#/g, '').trim();
 
   if (parts.length > 2) {
     githubClient.publishRelease(tagName, releaseTitle, parts.slice(2).join('\n'));
