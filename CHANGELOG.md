@@ -1,9 +1,7 @@
-# v0.0.2
-## Alpha version fix
+# v0.1.0
+## Different changelog separator
 ### What it does
-Fixes the description bug
-### Caveats
-maybe a few remaining
+Lalala
 
 <!-- -->
 
