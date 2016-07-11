@@ -1,0 +1,28 @@
+{
+  "name": "release-to-github-with-changelog",
+  "version": "0.0.1",
+  "description": "Parses CHANGELOG.md to publish a new release resource to the Github api",
+  "main": "index.js",
+  "bin": {
+    "release-to-github-with-changelog": "main.js"
+  },
+  "scripts": {
+    "test": "mocha bin/**/*spec.js"
+  },
+  "repository": {
+    "type": "git",
+    "fullname": "adrienDog/release-to-github-with-changelog",
+    "url": "git+https://github.com/adriendog/release-to-github-with-changelog.git"
+  },
+  "keywords": [
+    "npm",
+    "release",
+    "github"
+  ],
+  "author": "adrienDog",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/adriendog/release-to-github-with-changelog/issues"
+  },
+  "homepage": "https://github.com/adriendog/release-to-github-with-changelog#readme"
+}
