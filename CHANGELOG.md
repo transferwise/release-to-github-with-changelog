@@ -1,3 +1,10 @@
+# v0.1.1
+## Different changelog separator
+### What it does
+Lalala
+
+<!-- -->
+
 # v0.1.0
 ## Different changelog separator
 ### What it does

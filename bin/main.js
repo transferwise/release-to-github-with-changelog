@@ -20,7 +20,7 @@ if (!REPO_FULLNAME) {
 }
 
 if (!GITHUB_TOKEN) {
-  console.log('Please add your Github token in an .github_env file'.red, 'TOKEN=yourToken');
+  console.log('Please add your Github token in GITHUB_TOKEN env variable'.red);
   shell.exit(1);
 }
 
@@ -29,6 +29,14 @@ function publisItemAsReleaseToGithub(item) {
   var parts = item.split('\n');
   var tagName = parts[0].trim().replace(/#/g, '').trim();
   var releaseTitle = parts[1].trim().replace(/#/g, '').trim();
+
+  var versionFromPackage = utils.getVersionFromPackage();
+  var versionFromLastChangelogItem = tagName.replace('v', '');
+  if (versionFromPackage !== versionFromLastChangelogItem) {
+    console.log(('The package version (' + versionFromPackage + ') and the last ' +
+    'changelog item version (' + versionFromLastChangelogItem + ')  don\'t match').red);
+    shell.exit(1);
+  }
 
   if (parts.length > 2) {
     githubClient.publishRelease(tagName, releaseTitle, parts.slice(2).join('\n'));
