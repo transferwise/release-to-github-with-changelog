@@ -1,3 +1,8 @@
+# v0.2.2
+## Use CircleCI for auto release
+
+<!-- -->
+
 # v0.2.1
 ## Make tests pass
 
