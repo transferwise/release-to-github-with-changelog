@@ -5,7 +5,6 @@ var colors = require('colors');
 
 var utils = require('./utils');
 var gitUtils = require('./git-utils');
-var messages = require('./messages');
 var GithubClient = require('./github-client');
 
 var SEPARATOR = '<!-- -->';

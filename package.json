@@ -7,7 +7,7 @@
     "release-to-github-with-changelog": "main.js"
   },
   "scripts": {
-    "test": "mocha bin/**/*spec.js",
+    "test": "mocha bin/**/spec.js",
     "release": "npm publish && node bin/main.js"
   },
   "repository": {
@@ -25,5 +25,16 @@
   "bugs": {
     "url": "https://github.com/adriendog/release-to-github-with-changelog/issues"
   },
-  "homepage": "https://github.com/adriendog/release-to-github-with-changelog#readme"
+  "homepage": "https://github.com/adriendog/release-to-github-with-changelog#readme",
+  "dependencies": {
+    "colors": "^1.1.2",
+    "shelljs": "^0.7.0",
+    "yargs": "^4.7.1"
+  },
+  "devDependencies": {
+    "chai": "^3.5.0",
+    "mocha": "^2.5.3",
+    "proxyquire": "^1.7.10",
+    "sinon": "^1.17.4"
+  }
 }
