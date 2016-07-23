@@ -1,7 +1,6 @@
-# v0.1.1
-## Different changelog separator
-### What it does
-Lalala
+# v0.2.0
+## Use env variable for Github token
+You should now expose the github token as GITHUB_TOKEN in env variables
 
 <!-- -->
 
