@@ -11,9 +11,7 @@ var GithubClient = require('./github-client');
 var SEPARATOR = '<!-- -->';
 
 var REPO_FULLNAME = utils.getRepoFullnameFromPackage();
-var GITHUB_ENV_FILE = '.github_env';
-var env = utils.extractEnv(GITHUB_ENV_FILE);
-var TOKEN = env.TOKEN;
+var GITHUB_TOKEN = process.env.GITHUB_TOKEN;
 
 
 if (!REPO_FULLNAME) {
@@ -21,18 +19,13 @@ if (!REPO_FULLNAME) {
   shell.exit(1);
 }
 
-if (!TOKEN) {
+if (!GITHUB_TOKEN) {
   console.log('Please add your Github token in an .github_env file'.red, 'TOKEN=yourToken');
   shell.exit(1);
 }
 
-if (shell.grep('.github_env', '.gitignore').stdout.indexOf('.github_env') < 0) {
-  console.log('You should probably add .github_env to your .gitignore'.red);
-  shell.exit(1);
-}
-
 function publisItemAsReleaseToGithub(item) {
-  var githubClient = new GithubClient(REPO_FULLNAME, TOKEN);
+  var githubClient = new GithubClient(REPO_FULLNAME, GITHUB_TOKEN);
   var parts = item.split('\n');
   var tagName = parts[0].trim().replace(/#/g, '').trim();
   var releaseTitle = parts[1].trim().replace(/#/g, '').trim();

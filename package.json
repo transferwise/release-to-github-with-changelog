@@ -7,7 +7,8 @@
     "release-to-github-with-changelog": "main.js"
   },
   "scripts": {
-    "test": "mocha bin/**/*spec.js"
+    "test": "mocha bin/**/*spec.js",
+    "release": "npm publish && node bin/main.js"
   },
   "repository": {
     "type": "git",
