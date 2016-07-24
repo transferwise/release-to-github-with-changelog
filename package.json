@@ -1,6 +1,6 @@
 {
   "name": "release-to-github-with-changelog",
-  "version": "0.2.2",
+  "version": "0.2.3",
   "description": "Parses CHANGELOG.md to publish a new release resource to the Github api",
   "main": "index.js",
   "bin": {
