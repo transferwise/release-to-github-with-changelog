@@ -4,7 +4,7 @@
   "description": "Parses CHANGELOG.md to publish a new release resource to the Github api",
   "main": "index.js",
   "bin": {
-    "release-to-github-with-changelog": "main.js"
+    "release-to-github-with-changelog": "bin/main.js"
   },
   "scripts": {
     "test": "mocha bin/**/spec.js",
