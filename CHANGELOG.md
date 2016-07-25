@@ -1,3 +1,9 @@
+# v0.2.5
+## Add better validation on presence of repository fullname property
+Test if package.json has correct github repo fullname
+
+<!-- -->
+
 # v0.2.4
 ## Fix installation issue
 bin script wasn not referencing the bin folder

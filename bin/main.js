@@ -13,8 +13,8 @@ var REPO_FULLNAME = utils.getRepoFullnameFromPackage();
 var GITHUB_TOKEN = process.env.GITHUB_TOKEN;
 
 
-if (!REPO_FULLNAME) {
-  console.log('Please add "fullname" field to "repository" in package.json'.red);
+if (!REPO_FULLNAME || !REPO_FULLNAME.split('/').length == 2) {
+  console.log('Please add your repo full name in "repository.fullname" of package.json'.red);
   shell.exit(1);
 }
 
