@@ -1,3 +1,9 @@
+# v0.2.4
+## Fix installation issue
+bin script wasn't referencing the bin folder
+
+<!-- -->
+
 # v0.2.3
 ## Add README.md
 
