@@ -41,5 +41,8 @@ function getVersionFromPackage() {
 }
 
 function cleanStdout(stdoutString) {
-  return stdoutString.trim().replace(/\"/g, '');
+  var cleanedStdout = stdoutString.trim().replace(/\"/g, '');
+  if (cleanedStdout != 'null' && cleanedStdout != 'undefined') {
+    return cleanedStdout;
+  }
 }

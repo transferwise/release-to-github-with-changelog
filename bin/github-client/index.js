@@ -28,13 +28,16 @@ GithubClient.prototype.publishRelease = function(version, releaseTitle, releaseD
     version, releaseTitle, releaseDescription
   );
 
+  var releaseUri = getReleasesUri(this.repoFullname);
+
   var shellCommand = 'curl '
     + formCurlHeader('Accept', 'application/vnd.github.v3+json') + ' '
     + formCurlHeader('Authorization', 'token ' + this.token) + ' '
     + formCurlHeader('Content-Type', 'application/json') + ' '
     + '-X POST -d \'' + JSON.stringify(releaseResource) + '\' '
-    + getReleasesUri(this.repoFullname);
+    + releaseUri;
 
+  console.log('Publishing new release to '.blue + releaseUri);
   shell.exec(
     shellCommand,
     function(code, stdout, stderr) {

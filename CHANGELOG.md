@@ -1,3 +1,7 @@
+# v0.3.0
+## Add better validation on repo fullname
+And log release uri as info
+
 # v0.2.5
 ## Add better validation on presence of repository fullname property
 Test if package.json has correct github repo fullname
