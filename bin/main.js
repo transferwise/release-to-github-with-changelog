@@ -1,10 +1,8 @@
 #! /usr/bin/env node
 var shell = require('shelljs');
-var argv = require('yargs').argv;
 var colors = require('colors');
 
 var utils = require('./utils');
-var gitUtils = require('./git-utils');
 var GithubClient = require('./github-client');
 
 var SEPARATOR = '<!-- -->';
@@ -46,7 +44,6 @@ function publisItemAsReleaseToGithub(item) {
 
 function publishLastChangelogAsReleaseToGithub() {
   var changelogItems = shell.cat('CHANGELOG.md').split(SEPARATOR);
-  var lastItem = changelogItems[0];
   publisItemAsReleaseToGithub(changelogItems[0]);
 }
 
