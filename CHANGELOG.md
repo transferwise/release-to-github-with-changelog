@@ -1,3 +1,8 @@
+# v0.4.1
+## Small fixes
+
+<!-- -->
+
 # v0.4.0
 ## Big refactor
 
