@@ -7,7 +7,7 @@
     "release-to-github-with-changelog": "bin/main.js"
   },
   "scripts": {
-    "test": "mocha bin/**/spec.js",
+    "test": "mocha bin/**/spec.js && mocha bin/spec.js",
     "release": "npm publish && node bin/main.js"
   },
   "repository": {
@@ -33,6 +33,9 @@
   },
   "devDependencies": {
     "chai": "^3.5.0",
+    "eslint": "^3.10.2",
+    "eslint-config-airbnb-base": "^10.0.1",
+    "eslint-plugin-import": "^2.2.0",
     "mocha": "^2.5.3",
     "proxyquire": "^1.7.10",
     "sinon": "^1.17.4"

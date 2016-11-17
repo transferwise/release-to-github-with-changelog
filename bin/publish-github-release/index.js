@@ -1,4 +1,6 @@
 #! /usr/bin/env node
+"use-strict";
+
 const shell = require('shelljs');
 const colors = require('colors');
 const curlUtils = require('../curl-utils');
@@ -31,7 +33,7 @@ class GithubClient {
 
     const shellCommand = 'curl '
       + formCurlHeader('Accept', 'application/vnd.github.v3+json') + ' '
-      + formCurlHeader('Authorization', `token${this.token}`) + ' '
+      + formCurlHeader('Authorization', `token ${this.token}`) + ' '
       + formCurlHeader('Content-Type', 'application/json') + ' '
       + '-X POST -d \'' + JSON.stringify(releaseResourceCmd) + '\' '
       + releaseUri;

@@ -1,53 +1,50 @@
-describe('git-utils', function() {
+describe('git-utils', () => {
 
-  var chai = require('chai');
-  var assert = chai.assert;
-  var sinon = require('sinon');
-  var proxyquire =  require('proxyquire');
+  const chai = require('chai');
+  const assert = chai.assert;
+  const sinon = require('sinon');
+  const proxyquire =  require('proxyquire');
 
-  var VERSION = '0.0.1';
+  const VERSION = '0.0.1';
 
-  var shellStub = {
-    exec: sinon.spy()
+  const shellStub = {
+    exec: sinon.spy(),
   };
-  var utilsStub = {
-    getVersionFromPackage: function() { return VERSION; }
+  const utilsStub = {
+    getVersionFromPackage: () => VERSION,
   };
 
   // when no overrides are specified, path.extname behaves normally
-  var gitUtils = proxyquire('.', {
-    'shelljs': shellStub,
-    '../utils': utilsStub
+  const gitUtils = proxyquire('.', {
+    shelljs: shellStub,
+    '../utils': utilsStub,
   });
 
-  describe('bumpPackageVersion', function() {
+  describe('bumpPackageVersion', () => {
+    it('should make correct shell query', () => {
+      gitUtils.bumpPackageVersion(VERSION);
 
-    it('should make correct shell query', function() {
-      var res = gitUtils.bumpPackageVersion(VERSION);
-
-      assert(shellStub.exec.calledWith('npm version --no-git-tag-version ' + VERSION));
+      assert(shellStub.exec.calledWith(`npm version --no-git-tag-version ${VERSION}`));
     });
   });
 
-  describe('addAndCommitPackage', function() {
-
-    it('should add package.json', function() {
+  describe('addAndCommitPackage', () => {
+    it('should add package.json', () => {
       gitUtils.addAndCommitPackage(VERSION);
 
       assert(shellStub.exec.calledWith('git add package.json'));
     });
 
-    it('should commit package.json with correct message', function() {
+    it('should commit package.json with correct message', () => {
       gitUtils.addAndCommitPackage(VERSION);
 
-      var expectedMessage = '"Release ' + VERSION +'"';
-      assert(shellStub.exec.lastCall.calledWith('git commit package.json -m ' + expectedMessage));
+      const expectedMessage = `"Release ${VERSION}"`;
+      assert(shellStub.exec.lastCall.calledWith(`git commit package.json -m ${expectedMessage}`));
     });
   });
 
-  describe('pushToMaster', function() {
-
-    it('should push to origin master', function() {
+  describe('pushToMaster', () => {
+    it('should push to origin master', () => {
       gitUtils.pushToMaster();
 
       assert(shellStub.exec.calledWith('git push origin master'));
