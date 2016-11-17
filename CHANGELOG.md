@@ -1,3 +1,8 @@
+# v0.4.0
+## Big refactor
+
+<!-- -->
+
 # v0.3.1
 ## Remove unused imports
 
