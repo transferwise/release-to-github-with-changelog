@@ -1,6 +1,4 @@
 #! /usr/bin/env node
-"use-strict";
-
 const shell = require('shelljs');
 const colors = require('colors');
 const curlUtils = require('../curl-utils');
@@ -42,8 +40,8 @@ class GithubClient {
     shell.exec(
       shellCommand,
       (code, stdout, stderr) => {
-        const releaseResource = JSON.parse(stdout);
         if (code === 0) {
+          const releaseResource = JSON.parse(stdout);
           if (releaseResource.id) {
             console.log('Successfully created new release, with id '.green + releaseResource.id);
           } else {
