@@ -1,4 +1,7 @@
 # release-to-github-with-changelog
+[![CircleCI](https://circleci.com/gh/adrienDog/release-to-github-with-changelog.svg?style=shield&circle-token=:9f1c74e21caa562c5e012b5a781d0ce4d15812d2)](https://circleci.com/gh/adrienDog/release-t--github-with-changelog)
+
+[![npm version](https://badge.fury.io/js/release-to-github-with-changelog.svg)](https://badge.fury.io/js/release-to-github-with-changelog)
 
 *Node v6.9.1 is required*
 
