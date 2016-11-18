@@ -28,6 +28,8 @@
   "homepage": "https://github.com/adriendog/release-to-github-with-changelog#readme",
   "dependencies": {
     "colors": "^1.1.2",
+    "request": "^2.78.0",
+    "request-promise": "^4.1.1",
     "shelljs": "^0.7.0",
     "yargs": "^4.7.1"
   },
@@ -37,6 +39,7 @@
     "eslint-config-airbnb-base": "^10.0.1",
     "eslint-plugin-import": "^2.2.0",
     "mocha": "^2.5.3",
+    "nock": "^9.0.2",
     "proxyquire": "^1.7.10",
     "sinon": "^1.17.4"
   }

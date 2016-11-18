@@ -15,14 +15,36 @@ function publishLastChangelogAsReleaseToGithub() {
   const { version, releaseTitle, releaseDescription } = parseChangelog(shell.cat('CHANGELOG.md'))[0];
 
   checkVersionFromPackageEquals(version);
+  const targetBranch = yargs.argv.branch;
 
-  const publishRelease = getPublishReleaseFunction(repoFullname, githubToken, yargs.argv.branch);
+  const publishRelease = getPublishReleaseFunction(repoFullname, githubToken, targetBranch);
 
   if (releaseDescription) {
-    publishRelease(`v${version}`, releaseTitle, releaseDescription);
+    handlePublishReleasePromise(
+      publishRelease(`v${version}`, releaseTitle, releaseDescription),
+      version,
+      targetBranch
+    );
   } else {
-    publishRelease(`v${version}`, releaseTitle);
+    handlePublishReleasePromise(
+      publishRelease(`v${version}`, releaseTitle),
+      version,
+      targetBranch
+    );
   }
+}
+
+function handlePublishReleasePromise(promise, version, targetBranch) {
+  promise.then(response => {
+    console.log(response);
+    console.log(`Succesfully published ${version} release for target ${targetBranch}`.green);
+    shell.exit(0);
+  })
+  .catch(err => {
+    console.log(`Error when pubishing ${version} release for target ${targetBranch}`.red);
+    console.log(JSON.stringify(err).red);
+    shell.exit(1);
+  });
 }
 
 function getGithubTokenOrExit() {

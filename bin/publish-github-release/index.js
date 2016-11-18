@@ -1,9 +1,8 @@
 #! /usr/bin/env node
 const shell = require('shelljs');
 const colors = require('colors');
-const curlUtils = require('../curl-utils');
+const rp = require('request-promise');
 
-const formCurlHeader = curlUtils.formCurlHeader;
 const GITHUB_REPOS_URI = 'https://api.github.com/repos';
 
 class GithubReleaseClient {
@@ -15,13 +14,11 @@ class GithubReleaseClient {
 
   publishRelease(version, releaseTitle, releaseDescription) {
     if (!version) {
-      console.error('Please specify a version for the release to publish'.red);
-      shell.exit(1);
+      return Promise.reject('Please specify a version for the release to publish');
     }
 
     if (!releaseTitle) {
-      console.error('Please specify a title for the release to publish'.red);
-      shell.exit(1);
+      return Promise.reject('Please specify a title for the release to publish');
     }
 
     const releaseResourceCmd = formGithubReleaseResource({
@@ -33,31 +30,22 @@ class GithubReleaseClient {
 
     const releaseUri = getReleasesUri(this.repoFullname);
 
-    const shellCommand = 'curl '
-      + formCurlHeader('Accept', 'application/vnd.github.v3+json') + ' '
-      + formCurlHeader('Authorization', `token ${this.token}`) + ' '
-      + formCurlHeader('Content-Type', 'application/json') + ' '
-      + '-X POST -d \'' + JSON.stringify(releaseResourceCmd) + '\' '
-      + releaseUri;
+    const options = {
+      method: 'POST',
+      uri: releaseUri,
+      headers: {
+        Accept: 'application/vnd.github.v3+json',
+        'User-Agent': this.repoFullname.split('/')[0],
+        Authorization: `token ${this.token}`,
+        'Content-Type': 'application/json',
+      },
+      body: releaseResourceCmd,
+      json: true,
+    };
 
     console.log(`Publishing release ${version} against "${this.branch}" branch, to `.blue + releaseUri);
-    shell.exec(
-      shellCommand,
-      (code, stdout, stderr) => {
-        if (code === 0) {
-          const releaseResource = JSON.parse(stdout);
-          if (releaseResource.id) {
-            console.log('Successfully created new release, with id '.green + releaseResource.id);
-          } else {
-            console.log(stdout.red);
-            shell.exit(1);
-          }
-        } else {
-          console.error(stderr.red);
-          shell.exit(1);
-        }
-      }
-    );
+
+    return rp(options).catch(err => Promise.reject(err.response.body));
   }
 }
 

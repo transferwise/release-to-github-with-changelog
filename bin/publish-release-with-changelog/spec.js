@@ -1,4 +1,4 @@
-describe('main', () => {
+describe.only('main', () => {
   const chai = require('chai');
   const expect = chai.expect;
   const sinon = require('sinon');
@@ -10,6 +10,7 @@ describe('main', () => {
   const getRepoFullnameFromPackageMock = sinon.stub();
   const getPublishReleaseFunctionMock = sinon.stub();
   const publishReleaseMock = sinon.stub();
+  publishReleaseMock.returns(Promise.resolve({}));
   getPublishReleaseFunctionMock.returns(publishReleaseMock);
   const parseChangelogMock = sinon.stub();
 
