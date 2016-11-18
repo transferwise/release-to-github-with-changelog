@@ -1,7 +1,10 @@
-describe.only('main', () => {
+describe('main', () => {
   const chai = require('chai');
   const expect = chai.expect;
   const sinon = require('sinon');
+  const sinonChai = require("sinon-chai");
+  chai.use(sinonChai);
+
   const proxyquire =  require('proxyquire');
 
   const EXIT_1_ERROR = new Error('exit 1');
@@ -49,7 +52,7 @@ describe.only('main', () => {
       const publishReleaseWithChangelog = requirePublishReleaseWithChangelog();
       publishReleaseWithChangelog();
     } catch (e) {
-      expect(e).to.equal(EXIT_1_ERROR);
+      expect(shellStub.exit).to.have.been.calledWith(1);
     }
   });
 
@@ -59,7 +62,7 @@ describe.only('main', () => {
       const publishReleaseWithChangelog = requirePublishReleaseWithChangelog();
       publishReleaseWithChangelog();
     } catch (e) {
-      expect(e).to.equal(EXIT_1_ERROR);
+      expect(shellStub.exit).to.have.been.calledWith(1);
     }
   });
 
@@ -69,7 +72,7 @@ describe.only('main', () => {
       const publishReleaseWithChangelog = requirePublishReleaseWithChangelog();
       publishReleaseWithChangelog();
     } catch (e) {
-      expect(e).to.equal(EXIT_1_ERROR);
+      expect(shellStub.exit).to.have.been.calledWith(1);
     }
   });
 
@@ -95,11 +98,11 @@ describe.only('main', () => {
       const publishReleaseWithChangelog = requirePublishReleaseWithChangelog();
       publishReleaseWithChangelog();
     } catch (e) {
-      expect(e).to.equal(EXIT_1_ERROR);
+      expect(shellStub.exit).to.have.been.calledWith(1);
     }
   });
 
-  it('should publish release with tag name as version prefixed by "v"', () => {
+  it('should publish release with tag name as version prefixed by "v" with title', () => {
     parseChangelogMock.returns([aChangeLogItem(VERSION)]);
     shellStub.cat.returns(CHANGELOG_FILE_OUT);
     getVersionFromPackageMock.returns(VERSION);
@@ -111,23 +114,7 @@ describe.only('main', () => {
     const publishReleaseWithChangelog = requirePublishReleaseWithChangelog();
     publishReleaseWithChangelog();
 
-    const publishCall = publishReleaseMock.getCall(0);
-    expect(publishCall.args[0]).to.deep.equal(`v${VERSION}`);
-  });
-
-  it('should publish release with only title if no description', () => {
-    getVersionFromPackageMock.returns(VERSION);
-    shellStub.cat.returns(CHANGELOG_FILE_OUT);
-    parseChangelogMock.returns([
-      aChangeLogItem(VERSION, 'title'),
-      aChangeLogItem('0.0.3'),
-    ]);
-
-    const publishReleaseWithChangelog = requirePublishReleaseWithChangelog();
-    publishReleaseWithChangelog();
-
-    const publishCall = publishReleaseMock.getCall(0);
-    expect(publishCall.args[1]).to.equal('title');
+    expect(publishReleaseMock).to.have.been.calledWith(`v${VERSION}`, 'title');
   });
 
   it('should publish release with title and description if present in last changelog item', () => {
@@ -141,9 +128,24 @@ describe.only('main', () => {
     const publishReleaseWithChangelog = requirePublishReleaseWithChangelog();
     publishReleaseWithChangelog();
 
-    const publishCall = publishReleaseMock.getCall(0);
-    expect(publishCall.args[1]).to.deep.equal('title');
-    expect(publishCall.args[2]).to.deep.equal('description lala');
+    expect(publishReleaseMock)
+      .to.have.been.calledWith(`v${VERSION}`, 'title', 'description lala');
+  });
+
+  it('should exit with 1 if publish fails', () => {
+    getVersionFromPackageMock.returns(VERSION);
+    shellStub.cat.returns(CHANGELOG_FILE_OUT);
+    parseChangelogMock.returns([
+      aChangeLogItem(VERSION, 'title', 'description lala'),
+      aChangeLogItem('0.0.3'),
+    ]);
+    publishReleaseMock.returns(Promise.reject('errorrrrr'));
+
+    const publishReleaseWithChangelog = requirePublishReleaseWithChangelog();
+    return publishReleaseWithChangelog().catch(err => {
+      expect(err).to.equal(EXIT_1_ERROR);
+      expect(shellStub.exit).to.have.been.calledWith(1);
+    });
   });
 
   function requirePublishReleaseWithChangelog() {

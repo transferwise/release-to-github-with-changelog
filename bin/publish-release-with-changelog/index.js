@@ -15,27 +15,24 @@ function publishLastChangelogAsReleaseToGithub() {
   const { version, releaseTitle, releaseDescription } = parseChangelog(shell.cat('CHANGELOG.md'))[0];
 
   checkVersionFromPackageEquals(version);
-  const targetBranch = yargs.argv.branch;
+  const targetBranch = yargs.argv.branch || 'master';
 
   const publishRelease = getPublishReleaseFunction(repoFullname, githubToken, targetBranch);
 
   if (releaseDescription) {
-    handlePublishReleasePromise(
+    return handlePublishReleasePromise(
       publishRelease(`v${version}`, releaseTitle, releaseDescription),
       version,
-      targetBranch
-    );
-  } else {
-    handlePublishReleasePromise(
-      publishRelease(`v${version}`, releaseTitle),
-      version,
-      targetBranch
-    );
+      targetBranch);
   }
+  return handlePublishReleasePromise(
+    publishRelease(`v${version}`, releaseTitle),
+    version,
+    targetBranch);
 }
 
 function handlePublishReleasePromise(promise, version, targetBranch) {
-  promise.then(response => {
+  return promise.then(response => {
     console.log(response);
     console.log(`Succesfully published ${version} release for target ${targetBranch}`.green);
     shell.exit(0);
