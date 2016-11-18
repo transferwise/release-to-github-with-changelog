@@ -1,3 +1,8 @@
+# v0.5.3
+## Bump for test
+
+<!-- -->
+
 # v0.5.2
 ## Fix tests
 Mocha was calling the main file
