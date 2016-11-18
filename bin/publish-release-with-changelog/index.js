@@ -3,9 +3,9 @@ const shell = require('shelljs');
 const colors = require('colors');
 const yargs = require('yargs');
 
-const { getVersionFromPackage, getRepoFullnameFromPackage } = require('./utils');
-const { getPublishReleaseFunction } = require('./publish-github-release');
-const { parseChangelog } = require('./parser');
+const { getVersionFromPackage, getRepoFullnameFromPackage } = require('../utils');
+const { getPublishReleaseFunction } = require('../publish-github-release');
+const { parseChangelog } = require('../parser');
 
 
 function publishLastChangelogAsReleaseToGithub() {
@@ -54,4 +54,4 @@ function checkVersionFromPackageEquals(version) {
 }
 
 
-publishLastChangelogAsReleaseToGithub();
+module.exports = publishLastChangelogAsReleaseToGithub;

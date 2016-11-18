@@ -1,3 +1,9 @@
+# v0.5.2
+## Fix tests
+Mocha was calling the main file
+
+<!-- -->
+
 # v0.5.1
 ## Fix build
 Bump version

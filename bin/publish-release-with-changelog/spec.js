@@ -45,7 +45,8 @@ describe('main', () => {
   it('should exit if no GITHUB_TOKEN in env', () => {
     delete process.env.GITHUB_TOKEN;
     try {
-      runMain();
+      const publishReleaseWithChangelog = requirePublishReleaseWithChangelog();
+      publishReleaseWithChangelog();
     } catch (e) {
       expect(e).to.equal(EXIT_1_ERROR);
     }
@@ -54,7 +55,8 @@ describe('main', () => {
   it('should exit if no repo fullname', () => {
     getRepoFullnameFromPackageMock.returns(undefined);
     try {
-      runMain();
+      const publishReleaseWithChangelog = requirePublishReleaseWithChangelog();
+      publishReleaseWithChangelog();
     } catch (e) {
       expect(e).to.equal(EXIT_1_ERROR);
     }
@@ -63,7 +65,8 @@ describe('main', () => {
   it('should exit if bad repo fullname', () => {
     getRepoFullnameFromPackageMock.returns('eeee');
     try {
-      runMain();
+      const publishReleaseWithChangelog = requirePublishReleaseWithChangelog();
+      publishReleaseWithChangelog();
     } catch (e) {
       expect(e).to.equal(EXIT_1_ERROR);
     }
@@ -72,7 +75,8 @@ describe('main', () => {
   it('should cat the CHANGELOG.md file to the parser', () => {
     parseChangelogMock.returns([aChangeLogItem(VERSION)]);
     shellStub.cat.withArgs(CHANGELOG_FILE_NAME).returns('lala');
-    runMain();
+    const publishReleaseWithChangelog = requirePublishReleaseWithChangelog();
+    publishReleaseWithChangelog();
 
     const catCall = shellStub.cat.getCall(0);
     expect(catCall.args[0]).to.equal('CHANGELOG.md');
@@ -87,7 +91,8 @@ describe('main', () => {
     parseChangelogMock.returns([aChangeLogItem('0.0.3')]);
 
     try {
-      runMain();
+      const publishReleaseWithChangelog = requirePublishReleaseWithChangelog();
+      publishReleaseWithChangelog();
     } catch (e) {
       expect(e).to.equal(EXIT_1_ERROR);
     }
@@ -102,7 +107,8 @@ describe('main', () => {
       aChangeLogItem('0.0.3'),
     ]);
 
-    runMain();
+    const publishReleaseWithChangelog = requirePublishReleaseWithChangelog();
+    publishReleaseWithChangelog();
 
     const publishCall = publishReleaseMock.getCall(0);
     expect(publishCall.args[0]).to.deep.equal(`v${VERSION}`);
@@ -116,7 +122,8 @@ describe('main', () => {
       aChangeLogItem('0.0.3'),
     ]);
 
-    runMain();
+    const publishReleaseWithChangelog = requirePublishReleaseWithChangelog();
+    publishReleaseWithChangelog();
 
     const publishCall = publishReleaseMock.getCall(0);
     expect(publishCall.args[1]).to.equal('title');
@@ -130,24 +137,25 @@ describe('main', () => {
       aChangeLogItem('0.0.3'),
     ]);
 
-    runMain();
+    const publishReleaseWithChangelog = requirePublishReleaseWithChangelog();
+    publishReleaseWithChangelog();
 
     const publishCall = publishReleaseMock.getCall(0);
     expect(publishCall.args[1]).to.deep.equal('title');
     expect(publishCall.args[2]).to.deep.equal('description lala');
   });
 
-  function runMain() {
-    proxyquire('./main', {
+  function requirePublishReleaseWithChangelog() {
+    return proxyquire('.', {
       shelljs: shellStub,
-      './utils': {
+      '../utils': {
         getVersionFromPackage: getVersionFromPackageMock,
         getRepoFullnameFromPackage: getRepoFullnameFromPackageMock,
       },
-      './publish-github-release': {
+      '../publish-github-release': {
         getPublishReleaseFunction: getPublishReleaseFunctionMock,
       },
-      './parser': {
+      '../parser': {
         parseChangelog: parseChangelogMock,
       },
     });
