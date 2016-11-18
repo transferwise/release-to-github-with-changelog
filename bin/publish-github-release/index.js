@@ -40,7 +40,7 @@ class GithubReleaseClient {
       + '-X POST -d \'' + JSON.stringify(releaseResourceCmd) + '\' '
       + releaseUri;
 
-    console.log(`Publishing new release against "${this.branch}" branch, to `.blue + releaseUri);
+    console.log(`Publishing release ${version} against "${this.branch}" branch, to `.blue + releaseUri);
     shell.exec(
       shellCommand,
       (code, stdout, stderr) => {
@@ -50,9 +50,11 @@ class GithubReleaseClient {
             console.log('Successfully created new release, with id '.green + releaseResource.id);
           } else {
             console.log(stdout.red);
+            shell.exit(1);
           }
         } else {
-          console.error('Exit with code 0:'.underline.red, stderr.red);
+          console.error(stderr.red);
+          shell.exit(1);
         }
       }
     );

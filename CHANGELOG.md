@@ -1,3 +1,9 @@
+# v0.5.1
+## Fix build
+Bump version
+
+<!-- -->
+
 # v0.5.0
 ## Allow to specify branch name
 ### Usage
