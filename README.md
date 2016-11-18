@@ -1,5 +1,7 @@
 # release-to-github-with-changelog
 
+*Node v6.9.1 is required*
+
 ## Goal
 Keep the released npm package in sync with the GitHub repo master branch:
 - the last `CHANGELOG.md` item is in sync with the last release on Github, with corresponding version tag
