@@ -6,10 +6,11 @@ const curlUtils = require('../curl-utils');
 const formCurlHeader = curlUtils.formCurlHeader;
 const GITHUB_REPOS_URI = 'https://api.github.com/repos';
 
-class GithubClient {
-  constructor(repoFullname, token) {
+class GithubReleaseClient {
+  constructor(repoFullname, token, branch) {
     this.repoFullname = repoFullname;
     this.token = token;
+    this.branch = branch || 'master';
   }
 
   publishRelease(version, releaseTitle, releaseDescription) {
@@ -23,9 +24,12 @@ class GithubClient {
       shell.exit(1);
     }
 
-    const releaseResourceCmd = formGithubReleaseResource(
-      version, releaseTitle, releaseDescription
-    );
+    const releaseResourceCmd = formGithubReleaseResource({
+      version,
+      title: releaseTitle,
+      description: releaseDescription,
+      branch: this.branch,
+    });
 
     const releaseUri = getReleasesUri(this.repoFullname);
 
@@ -36,7 +40,7 @@ class GithubClient {
       + '-X POST -d \'' + JSON.stringify(releaseResourceCmd) + '\' '
       + releaseUri;
 
-    console.log('Publishing new release to '.blue + releaseUri);
+    console.log(`Publishing new release against "${this.branch}" branch, to `.blue + releaseUri);
     shell.exec(
       shellCommand,
       (code, stdout, stderr) => {
@@ -59,10 +63,10 @@ function getReleasesUri(repoFullname) {
   return [GITHUB_REPOS_URI, repoFullname, 'releases'].join('/');
 }
 
-function formGithubReleaseResource(version, title, description) {
+function formGithubReleaseResource({ version, title, description, branch }) {
   const releaseResource = {
     tag_name: version.indexOf('v') < 0 ? `v${version}` : version,
-    target_commitish: 'master',
+    target_commitish: branch,
     name: title,
   };
   if (description) {
@@ -71,10 +75,10 @@ function formGithubReleaseResource(version, title, description) {
   return releaseResource;
 }
 
-function getPublishReleaseFunction(repoFullname, token) {
-  const githubClient = new GithubClient(repoFullname, token);
+function getPublishReleaseFunction(repoFullname, token, branch) {
+  const githubReleaseClient = new GithubReleaseClient(repoFullname, token, branch);
   return (version, releaseTitle, releaseDescription) => (
-    githubClient.publishRelease(version, releaseTitle, releaseDescription)
+    githubReleaseClient.publishRelease(version, releaseTitle, releaseDescription)
   );
 }
 

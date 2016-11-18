@@ -1,6 +1,7 @@
 #! /usr/bin/env node
 const shell = require('shelljs');
 const colors = require('colors');
+const yargs = require('yargs');
 
 const { getVersionFromPackage, getRepoFullnameFromPackage } = require('./utils');
 const { getPublishReleaseFunction } = require('./publish-github-release');
@@ -12,11 +13,10 @@ function publishLastChangelogAsReleaseToGithub() {
   const githubToken = getGithubTokenOrExit();
 
   const { version, releaseTitle, releaseDescription } = parseChangelog(shell.cat('CHANGELOG.md'))[0];
-  console.log(releaseTitle, releaseDescription);
 
   checkVersionFromPackageEquals(version);
 
-  const publishRelease = getPublishReleaseFunction(repoFullname, githubToken);
+  const publishRelease = getPublishReleaseFunction(repoFullname, githubToken, yargs.argv.branch);
 
   if (releaseDescription) {
     publishRelease(`v${version}`, releaseTitle, releaseDescription);

@@ -21,7 +21,7 @@ describe('getPublishReleaseFunction', () => {
     shelljs: shellStub,
   });
 
-  describe('publishRelease', () => {
+  describe('publishRelease default', () => {
     let publishRelease;
     beforeEach(() => {
       publishRelease = getPublishReleaseFunction(REPO_FULLNAME, TOKEN);
@@ -47,7 +47,7 @@ describe('getPublishReleaseFunction', () => {
       }
     });
 
-    it('should make correct curl call', () => {
+    it('should make correct curl call and use master by default', () => {
       const expectedReleaseResource = {
         tag_name: `v${VERSION}`,
         target_commitish: 'master',
@@ -74,6 +74,24 @@ describe('getPublishReleaseFunction', () => {
 
       const call = shellStub.exec.getCall(0);
       expect(call.args[0]).to.contain(JSON.stringify(expectedReleaseResource));
+    });
+  });
+
+  describe('publishRelease for branch', () => {
+    it('should make correct curl call and use master by default', () => {
+      const publishRelease = getPublishReleaseFunction(REPO_FULLNAME, TOKEN, 'release');
+
+      const expectedReleaseResource = {
+        tag_name: `v${VERSION}`,
+        target_commitish: 'release',
+        name: RELEASE_TITLE,
+      };
+      const expectedCurlCommand = `curl -H "Accept: application/vnd.github.v3+json" -H "Authorization: token token" -H "Content-Type: application/json" -X POST -d '${JSON.stringify(expectedReleaseResource)}' https://api.github.com/repos/${REPO_FULLNAME}/releases`;
+
+      publishRelease(VERSION, RELEASE_TITLE);
+
+      const call = shellStub.exec.getCall(0);
+      expect(call.args[0]).to.equal(expectedCurlCommand);
     });
   });
 });

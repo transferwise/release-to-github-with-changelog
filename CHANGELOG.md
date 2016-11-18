@@ -1,3 +1,10 @@
+# v0.5.0
+## Allow to specify branch name
+### Usage
+Pass the --branch=myBranch to the command
+
+<!-- -->
+
 # v0.4.1
 ## Small fixes
 
