@@ -1,3 +1,9 @@
+# v0.5.4
+## Improve logging
+Refactored tests
+
+<!-- -->
+
 # v0.5.3
 ## Bump for test
 
