@@ -60,6 +60,7 @@ Don't forget the `repository.fullname`.
   "scripts": {
     "build": // build dist files
     "release": "npm publish && npm run release-to-github-with-changelog",
+    "release": "npm publish && npm run release-to-github-with-changelog --branch=releases", // optional branch name
     "test": // your test command
   }
 }
