@@ -1,4 +1,4 @@
-describe('main', () => {
+describe('publish-release-with-changelog', () => {
   const chai = require('chai');
   const expect = chai.expect;
   const sinon = require('sinon');

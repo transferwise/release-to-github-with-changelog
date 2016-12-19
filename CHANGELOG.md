@@ -1,3 +1,16 @@
+# v0.6.0
+## Add pre-release-checks script
+To make sure a branch or PR has `package.json` and `CHANGELOG.md` in sync, you can now add this script to your tests:
+
+```
+"scripts": {
+  "test": "mocha ... && release-to-github-with-changelog-pre-release-checks",
+  "release-to-github": "release-to-github-with-changelog --branch=releases",
+},
+```
+
+<!-- -->
+
 # v0.5.5
 ## Fix
 

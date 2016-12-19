@@ -6,15 +6,16 @@ const yargs = require('yargs');
 const { getVersionFromPackage, getRepoFullnameFromPackage } = require('../utils');
 const { getPublishReleaseFunction } = require('../publish-github-release');
 const { parseChangelog } = require('../parser');
-
+const verifyPackageAndChangelogSync = require('../verify-package-changelog-sync');
 
 function publishLastChangelogAsReleaseToGithub() {
   const repoFullname = getValidRepoFullnameOrExit();
   const githubToken = getGithubTokenOrExit();
 
+  verifyPackageAndChangelogSync();
+
   const { version, releaseTitle, releaseDescription } = parseChangelog(shell.cat('CHANGELOG.md'))[0];
 
-  checkVersionFromPackageEquals(version);
   const targetBranch = yargs.argv.branch || 'master';
 
   const publishRelease = getPublishReleaseFunction(repoFullname, githubToken, targetBranch);
@@ -62,15 +63,5 @@ function getValidRepoFullnameOrExit() {
   }
   return repoFullname;
 }
-
-function checkVersionFromPackageEquals(version) {
-  const versionFromPackage = getVersionFromPackage();
-
-  if (versionFromPackage !== version) {
-    console.log(`The package version (${versionFromPackage}) and the last changelog item version ${version}) don't match`.red);
-    shell.exit(1);
-  }
-}
-
 
 module.exports = publishLastChangelogAsReleaseToGithub;
