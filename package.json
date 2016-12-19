@@ -5,7 +5,7 @@
   "main": "index.js",
   "bin": {
     "release-to-github-with-changelog": "bin/index.js",
-    "release-to-github-with-changelog-pre-release-checks": "bin/pre-release-checks.js",
+    "release-to-github-with-changelog-pre-release-checks": "bin/pre-release-checks.js"
   },
   "scripts": {
     "test": "mocha bin/**/*spec.js",
