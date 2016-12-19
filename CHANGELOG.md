@@ -1,3 +1,9 @@
+# v0.6.1
+## Fix version discrepancies
+Between npm and github
+
+<!-- -->
+
 # v0.6.0
 ## Add pre-release-checks script
 To make sure a branch or PR has `package.json` and `CHANGELOG.md` in sync, you can now add this script to your tests:

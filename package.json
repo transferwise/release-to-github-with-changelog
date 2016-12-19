@@ -1,6 +1,6 @@
 {
   "name": "release-to-github-with-changelog",
-  "version": "0.6.0",
+  "version": "0.6.1",
   "description": "Parses CHANGELOG.md to publish a new release resource to the Github api",
   "main": "index.js",
   "bin": {
@@ -13,8 +13,8 @@
   },
   "repository": {
     "type": "git",
-    "fullname": "adrienDog/release-to-github-with-changelog",
-    "url": "git+https://github.com/adriendog/release-to-github-with-changelog.git"
+    "fullname": "transferwise/release-to-github-with-changelog",
+    "url": "git+https://github.com/transferwise/release-to-github-with-changelog.git"
   },
   "keywords": [
     "npm",
