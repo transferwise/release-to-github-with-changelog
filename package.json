@@ -1,10 +1,11 @@
 {
   "name": "release-to-github-with-changelog",
-  "version": "0.5.5",
+  "version": "0.6.0",
   "description": "Parses CHANGELOG.md to publish a new release resource to the Github api",
   "main": "index.js",
   "bin": {
-    "release-to-github-with-changelog": "bin/index.js"
+    "release-to-github-with-changelog": "bin/index.js",
+    "release-to-github-with-changelog-pre-release-checks": "bin/pre-release-checks.js",
   },
   "scripts": {
     "test": "mocha bin/**/*spec.js",
