@@ -13,8 +13,8 @@
   },
   "repository": {
     "type": "git",
-    "fullname": "adrienDog/release-to-github-with-changelog",
-    "url": "git+https://github.com/adriendog/release-to-github-with-changelog.git"
+    "fullname": "transferwise/release-to-github-with-changelog",
+    "url": "git+https://github.com/transferwise/release-to-github-with-changelog.git"
   },
   "keywords": [
     "npm",
