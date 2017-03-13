@@ -6,7 +6,15 @@ const { getVersionFromPackage } = require('../utils');
 const { parseChangelog } = require('../parser');
 
 function verifyPackageAndChangelogSync() {
-  const { version } = parseChangelog(shell.cat('CHANGELOG.md'))[0];
+  let mostRecentItem;
+  try {
+    mostRecentItem = parseChangelog(shell.cat('CHANGELOG.md'))[0];
+  } catch (e) {
+    console.log(`${e.name}: ${e.message}`.red);
+    shell.exit(1);
+  }
+
+  const version = mostRecentItem.version;
 
   const versionFromPackage = getVersionFromPackage();
 
