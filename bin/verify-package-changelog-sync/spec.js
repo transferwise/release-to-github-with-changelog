@@ -49,6 +49,19 @@ describe('verify-package-changelog-sync', () => {
     expect(parserCall.args[0]).to.equal('lala');
   });
 
+  it('should exit if exception from parsing', () => {
+    const error = new Error('Parsing error');
+    parseChangelogMock.throws(error);
+    shellStub.cat.withArgs(CHANGELOG_FILE_NAME).returns('lala');
+    const publishReleaseWithChangelog = requireVerifyPackageChangelogSync();
+
+    try {
+      publishReleaseWithChangelog();
+    } catch (e) {
+      expect(shellStub.exit).to.have.been.calledWith(1);
+    }
+  });
+
   it('should exit if versions from package and last changelog item differ', () => {
     parseChangelogMock.returns([aChangeLogItem(VERSION)]);
     shellStub.cat.returns(CHANGELOG_FILE_OUT);
