@@ -19,24 +19,17 @@ function isUsableItem(potentialItem) {
   return potentialItem.split('\n').length > 1;
 }
 
-function isChangelogCorrectlyFormatted(items) {
-  for (let i = 0; i < items.length; i += 1) {
-    const item = items[i];
-    if (!isUsableItem(item)) return false;
-  }
-  return true;
-}
-
 const BADLY_FORMATTED_CHANGELOG = `An item in your CHANGELOG seems to be badly
 formatted. Please check you have no trailing separator at the end of your CHANGELOG`;
+
 function checkChangelogIsCorrectlyFormatted(items) {
-  if (!isChangelogCorrectlyFormatted(items)) throw new Error(BADLY_FORMATTED_CHANGELOG);
+  if (!items.every(isUsableItem)) throw new Error(BADLY_FORMATTED_CHANGELOG);
 }
 
 function parseChangelog(stdOut) {
   const changelogItems = stdOut.split(SEPARATOR);
   checkChangelogIsCorrectlyFormatted(changelogItems);
-  return changelogItems.filter(isUsableItem).map(parseChangelogItem);
+  return changelogItems.map(parseChangelogItem);
 }
 
 module.exports = {
