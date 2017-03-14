@@ -1,3 +1,10 @@
+# v0.7.0
+## Fail job when badly formatted CHANGELOG
+Before a trailing separator could fail the job for un unexpected reason.
+Now the `pre-release-checks` also checks every CHANGELOG item is well formatted.
+
+<!-- -->
+
 # v0.6.1
 ## Fix version discrepancies
 Between npm and github
