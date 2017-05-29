@@ -8,8 +8,6 @@ describe('getPublishReleaseFunction', () => {
 `# v0.0.2
 ## Title of version 2
 
-<!-- -->
-
 # v0.0.1
 ## Title of version 1`;
 
@@ -24,9 +22,7 @@ describe('getPublishReleaseFunction', () => {
 ## Title of version 2
 `,
 `v0.0.2
-## Title of version 2
-
-<!-- -->`,
+## Title of version 2`,
     ].forEach(badlyFormattedChangelog => {
       it('throws when badly formatted CHANGELOG', () => {
         let exception;
