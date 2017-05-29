@@ -85,8 +85,8 @@ describe('utils', () => {
 
     describe('getRepoFullnameFromPackage', () => {
       before(() => {
-        shellStub.exec.withArgs('jq ".repository.fullname"').returns({
-          stdout: `"${REPO_FULLNAME}"\n`,
+        shellStub.exec.withArgs('jq ".repository.url"').returns({
+          stdout: `"https://github.com/${REPO_FULLNAME}"\n`,
         });
       });
 

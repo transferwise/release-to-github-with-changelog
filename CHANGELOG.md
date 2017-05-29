@@ -1,3 +1,7 @@
+# v1.1.0
+## Get Github repository full name from repository url
+Before, it was required to have the full name under `repository.fullname` in your `package.json`.
+
 # v1.0.0
 ## Separator not needed anymore
 Previously, a `<!-- -->` separator was needed in the CHANGELOG.md.

@@ -27,7 +27,11 @@ function extractEnv(envFile) {
 }
 
 function getRepoFullnameFromPackage() {
-  return cleanStdout(shell.cat('package.json').exec('jq ".repository.fullname"').stdout);
+  const repoUrl = cleanStdout(shell.cat('package.json').exec('jq ".repository.url"').stdout);
+  const urlAsArray = repoUrl.split('/');
+  const indexOfGithubDomain = urlAsArray.indexOf('github.com');
+
+  return `${urlAsArray[indexOfGithubDomain + 1]}/${urlAsArray[indexOfGithubDomain + 2]}`;
 }
 
 function getVersionFromPackage() {

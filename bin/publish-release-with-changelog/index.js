@@ -56,9 +56,8 @@ function getGithubTokenOrExit() {
 
 function getValidRepoFullnameOrExit() {
   const repoFullname = getRepoFullnameFromPackage();
-  console.log(repoFullname);
   if (!repoFullname || repoFullname.split('/').length !== 2) {
-    console.log('Please add your repo full name in "repository.fullname" of package.json'.red);
+    console.log('Please add your Github repo url under "repository.url" in package.json'.red);
     shell.exit(1);
   }
   return repoFullname;
