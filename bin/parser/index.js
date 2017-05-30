@@ -2,6 +2,9 @@ function parseChangelogItem(item) {
   const parts = item.trim().split('\n');
   const tagName = parts[0].trim().replace(/#/g, '').trim();
   const releaseTitle = parts[1].trim().replace(/#/g, '').trim();
+
+  if (!tagName || !releaseTitle) throw new Error(BADLY_FORMATTED_CHANGELOG);
+
   const releaseDescription = parts.length > 1 && parts.slice(2).join('\n');
 
   const version = tagName.replace('v', '');
@@ -14,38 +17,47 @@ function parseChangelogItem(item) {
 }
 
 const BADLY_FORMATTED_CHANGELOG = `Your CHANGELOG.md seems to be badly formatted.
-Every item should start with #v1.0.0\n##Release title\n`;
+Every item should start with:
+#v1.0.0
+##Release title`;
 
 function parseChangelog(stdOut) {
   try {
-    return getItemsFromStdOut(stdOut);
+    return getItemsAsStrings(stdOut).map(parseChangelogItem);
   } catch (e) {
     console.error(e.message);
     throw new Error(BADLY_FORMATTED_CHANGELOG);
   }
 }
 
-function getItemsFromStdOut(stdOut) {
-  let indexes = [];
+function getItemsAsStrings(changelog) {
   let items = [];
 
-  const itemVersionRegex = /#\s?(v\d\.\d\.?\d?)/g;
-  let match;
-  while ((match = itemVersionRegex.exec(stdOut)) !== null) {
-    indexes.push({ version: match[1], index: match.index })
-  }
+  let regexMatches = getRegexMatchesForChangelogItems(changelog);
 
-  if (indexes.length < 1) throw new Error(BADLY_FORMATTED_CHANGELOG);
+  if (regexMatches.length < 1) throw new Error(BADLY_FORMATTED_CHANGELOG);
 
-  for (let i = 0; i < indexes.length; i++) {
-    if (i < indexes.length - 1) {
-      items.push(parseChangelogItem(stdOut.substring(indexes[i].index, indexes[i+1].index)));
+  for (let i = 0; i < regexMatches.length; i++) {
+    const match = regexMatches[i];
+    if (i < regexMatches.length - 1) {
+      const nextMatch = regexMatches[i+1];
+      items.push(changelog.substring(match.index, nextMatch.index));
     } else {
-      items.push(parseChangelogItem(stdOut.substring(indexes[i].index)));
+      items.push(changelog.substring(match.index));
     }
   }
 
   return items;
+}
+
+function getRegexMatchesForChangelogItems(changelog) {
+  const itemVersionRegex = /#\s?(v\d\.\d\.?\d?)/g;
+  let match;
+  let regexMatches = [];
+  while ((match = itemVersionRegex.exec(changelog)) !== null) {
+    regexMatches.push(match);
+  }
+  return regexMatches;
 }
 
 module.exports = {

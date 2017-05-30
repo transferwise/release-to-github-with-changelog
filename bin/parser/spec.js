@@ -30,7 +30,7 @@ describe('getPublishReleaseFunction', () => {
     ].forEach(badlyFormattedChangelog => {
       it('throws when badly formatted CHANGELOG', () => {
         let exception;
-        
+
         try {
           parseChangelog(badlyFormattedChangelog);
         } catch (e) {
