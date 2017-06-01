@@ -1,3 +1,15 @@
+# v1.0.0
+## Separator not needed anymore
+Previously, a `<!-- -->` separator was needed in the CHANGELOG.md.
+Now, every item is identified by its structure.
+### Example
+```
+# v1.0.0
+## Release title
+### Some markdown notes
+About the release
+```
+
 # v0.7.0
 ## Fail job when badly formatted CHANGELOG
 Previously, a trailing separator could fail the job for an unexpected reason.

@@ -22,24 +22,19 @@ Every `CHANGELOG.md` item should represent a release note of the version it desc
 ## The release title
 // The release description in markdown
 
-<!-- -->
-
+# v0.1.9
+...
 ```
-`<!-- -->` is the separator between your items. It does not appear when Markdown is rendered.
 #### Full example:
 ```
 # v0.2.0
-## Use env variable for Github token
-You should now expose the github token as GITHUB_TOKEN in env variables
-
-<!-- -->
+## We can fly
+Great news! The machine can now also fly!
 
 # v0.1.0
-## Different changelog separator
-### What it does
-Lalala
-
-<!-- -->
+## We can move
+### What the machine does
+It can move, a bit slowly but still it moves.
 
 //...
 ```

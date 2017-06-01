@@ -19,21 +19,26 @@ describe('getPublishReleaseFunction', () => {
       expect(items[0].version).to.equal('0.0.2');
     });
 
-    it('throws when trailing separator', () => {
-      let exception;
-      const badlyFormattedChangelog =
-`# v0.0.2
+    [
+`# 0.0.2
+## Title of version 2
+`,
+`v0.0.2
 ## Title of version 2
 
-<!-- -->`;
+<!-- -->`,
+    ].forEach(badlyFormattedChangelog => {
+      it('throws when badly formatted CHANGELOG', () => {
+        let exception;
 
-      try {
-        parseChangelog(badlyFormattedChangelog);
-      } catch (e) {
-        exception = e;
-      }
+        try {
+          parseChangelog(badlyFormattedChangelog);
+        } catch (e) {
+          exception = e;
+        }
 
-      expect(exception).to.not.equal(undefined);
+        expect(exception).to.not.equal(undefined);
+      });
     });
   });
 });
