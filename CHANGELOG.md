@@ -1,3 +1,6 @@
+# v1.1.1
+## Bump version to fix CI
+
 # v1.1.0
 ## Get Github repository full name from repository url
 Before, it was required to have the full name under `repository.fullname` in your `package.json`.
