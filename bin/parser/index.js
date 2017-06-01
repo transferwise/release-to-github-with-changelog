@@ -1,11 +1,11 @@
 function parseChangelogItem(item) {
-  const parts = item.trim().split('\n');
-  const tagName = parts[0].trim().replace(/#/g, '').trim();
-  const releaseTitle = parts[1].trim().replace(/#/g, '').trim();
+  const regex =  /#\s?(v\d\.\d\.?\d?)\n##\s?(.*)([\s\S]*)/g;
+  const match = regex.exec(item);
+
+  const [tagName, releaseTitle, description] = match.slice(1,4);
+  const releaseDescription = description.trim();
 
   if (!tagName || !releaseTitle) throw new Error(BADLY_FORMATTED_CHANGELOG);
-
-  const releaseDescription = parts.length > 1 && parts.slice(2).join('\n');
 
   const version = tagName.replace('v', '');
 
@@ -25,7 +25,6 @@ function parseChangelog(stdOut) {
   try {
     return getItemsAsStrings(stdOut).map(parseChangelogItem);
   } catch (e) {
-    console.error(e.message);
     throw new Error(BADLY_FORMATTED_CHANGELOG);
   }
 }
