@@ -31,7 +31,10 @@ function getRepoFullnameFromPackage() {
   const urlAsArray = repoUrl.split('/');
   const indexOfGithubDomain = urlAsArray.indexOf('github.com');
 
-  return `${urlAsArray[indexOfGithubDomain + 1]}/${urlAsArray[indexOfGithubDomain + 2]}`;
+  const ownerName = urlAsArray[indexOfGithubDomain + 1];
+  const repoName = urlAsArray[indexOfGithubDomain + 2].split('.')[0];
+
+  return `${ownerName}/${repoName}`;
 }
 
 function getVersionFromPackage() {

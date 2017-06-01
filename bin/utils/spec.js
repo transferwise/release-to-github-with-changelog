@@ -84,19 +84,31 @@ describe('utils', () => {
     });
 
     describe('getRepoFullnameFromPackage', () => {
-      before(() => {
+      it('should read from package.json', () => {
         shellStub.exec.withArgs('jq ".repository.url"').returns({
           stdout: `"https://github.com/${REPO_FULLNAME}"\n`,
         });
-      });
 
-      it('should read from package.json', () => {
         const repoName = utils.getRepoFullnameFromPackage();
 
         sinon.assert.calledWith(shellStub.cat, 'package.json');
       });
 
       it('should return correct value from package.json', () => {
+        shellStub.exec.withArgs('jq ".repository.url"').returns({
+          stdout: `"https://github.com/${REPO_FULLNAME}"\n`,
+        });
+
+        const repoName = utils.getRepoFullnameFromPackage();
+
+        expect(repoName).to.equal(REPO_FULLNAME);
+      });
+
+      it('should return only the repo fullname (without .git)', () => {
+        shellStub.exec.withArgs('jq ".repository.url"').returns({
+          stdout: `"https://github.com/${REPO_FULLNAME}.git"\n`,
+        });
+
         const repoName = utils.getRepoFullnameFromPackage();
 
         expect(repoName).to.equal(REPO_FULLNAME);

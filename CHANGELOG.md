@@ -1,3 +1,8 @@
+# v1.1.2
+## Fix v1.1.0 and v1.1.1
+The repo full name was including the .git suffix by mistake.
+So the release push API was called with wrong repo name /shrug.
+
 # v1.1.1
 ## Bump version to fix CI
 
