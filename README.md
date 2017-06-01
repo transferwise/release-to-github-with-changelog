@@ -42,13 +42,14 @@ It can move, a bit slowly but still it moves.
 Either locally with `export GITHUB_TOKEN=$yourToken` or in your CI tool settings (see CircleCI example).
 
 ### Example of package.json
-Don't forget the `repository.fullname`.
+Don't forget the `repository.url`. It will be parsed to extract the repository full name (`myOrg/myRepo` in this example).
+#### Test tool
+You can include a check of your `CHANGELOG.md` format in your test command by using the provided `release-to-github-with-changelog-pre-release-checks` command.
 ```
 {
   "version": "0.2.0",
   "respository": {
     "type": "git",
-    "fullname": "myOrg/myRepo",
     "url": "git+https://github.com/myOrg/myRepo.git"
   },
   "files": ["dist"],
@@ -56,7 +57,7 @@ Don't forget the `repository.fullname`.
     "build": // build dist files
     "release": "npm publish && npm run release-to-github-with-changelog",
     "release": "npm publish && npm run release-to-github-with-changelog --branch=releases", // optional branch name
-    "test": // your test command
+    "test": "release-to-github-with-changelog-pre-release-checks && karma start"
   }
 }
 ```
