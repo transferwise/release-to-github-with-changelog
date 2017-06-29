@@ -1,3 +1,7 @@
+# v1.1.4
+## Allow several digits versions parts
+Fixes issue 14
+
 # v1.1.3
 ## Improve README
 

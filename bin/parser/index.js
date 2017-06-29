@@ -1,5 +1,5 @@
 function parseChangelogItem(item) {
-  const regex =  /#\s?(v\d\.\d\.?\d?)\n##\s?(.*)([\s\S]*)/g;
+  const regex =  /#\s?(v\d+\.\d+\.?\d*)\n##\s?(.*)([\s\S]*)/g;
   const match = regex.exec(item);
 
   const [tagName, releaseTitle, description] = match.slice(1,4);
@@ -18,8 +18,8 @@ function parseChangelogItem(item) {
 
 const BADLY_FORMATTED_CHANGELOG = `Your CHANGELOG.md seems to be badly formatted.
 Every item should start with:
-#v1.0.0
-##Release title`;
+# v1.0.0
+## Release title`;
 
 function parseChangelog(stdOut) {
   try {
@@ -50,7 +50,7 @@ function getItemsAsStrings(changelog) {
 }
 
 function getRegexMatchesForChangelogItems(changelog) {
-  const itemVersionRegex = /#\s?(v\d\.\d\.?\d?)/g;
+  const itemVersionRegex = /#\s?(v\d+\.\d+\.?\d*)/g;
   let match;
   let regexMatches = [];
   while ((match = itemVersionRegex.exec(changelog)) !== null) {
