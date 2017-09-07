@@ -22,7 +22,7 @@ function verifyPackageAndChangelogSync() {
     console.log(`The package version (${versionFromPackage}) and the last changelog item version (${version}) don't match`.red);
     shell.exit(1);
   } else {
-    console.log(`The package version and the last changelog item version are in sync`.green);
+    console.log('The package version and the last changelog item version are in sync'.green);
   }
 }
 

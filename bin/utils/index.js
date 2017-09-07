@@ -1,11 +1,5 @@
 #! /usr/bin/env node
-const shell = require('shelljs');
-
-if (!shell.which('jq')) {
-  shell.echo('Sorry, this script requires jq: run "brew install jq" or download at https://stedolan.github.io/jq/');
-  shell.exit(1);
-}
-
+const fs = require('fs');
 
 module.exports = {
   extractEnv,
@@ -14,7 +8,7 @@ module.exports = {
 };
 
 function extractEnv(envFile) {
-  const rawEnv = shell.cat(envFile).stdout;
+  const rawEnv = fs.readFileSync(envFile, 'utf8');
   const couples = rawEnv
   .replace(/'/g, '')
   .split('\n')
@@ -27,9 +21,9 @@ function extractEnv(envFile) {
 }
 
 function getRepoFullnameFromPackage() {
-  const repoUrl = cleanStdout(shell.cat('package.json').exec('jq ".repository.url"').stdout);
+  const repoUrl = getPackageJson().repository.url;
   const urlAsArray = repoUrl.split('/');
-  const indexOfGithubDomain = urlAsArray.indexOf('github.com');
+  const indexOfGithubDomain = urlAsArray.findIndex(el => el.indexOf('github.com') > -1);
 
   const ownerName = urlAsArray[indexOfGithubDomain + 1];
   const repoName = urlAsArray[indexOfGithubDomain + 2].split('.')[0];
@@ -38,13 +32,9 @@ function getRepoFullnameFromPackage() {
 }
 
 function getVersionFromPackage() {
-  return cleanStdout(shell.cat('package.json').exec('jq ".version"').stdout);
+  return getPackageJson().version;
 }
 
-function cleanStdout(stdoutString) {
-  const cleanedStdout = stdoutString.trim().replace(/"/g, '');
-  if (cleanedStdout !== 'null' && cleanedStdout !== 'undefined') {
-    return cleanedStdout;
-  }
-  return '';
+function getPackageJson() {
+  return JSON.parse(fs.readFileSync('package.json', 'utf8'));
 }

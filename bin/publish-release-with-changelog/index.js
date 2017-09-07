@@ -1,9 +1,10 @@
 #! /usr/bin/env node
+const fs = require('fs');
 const shell = require('shelljs');
 const colors = require('colors');
 const yargs = require('yargs');
 
-const { getVersionFromPackage, getRepoFullnameFromPackage } = require('../utils');
+const { getRepoFullnameFromPackage } = require('../utils');
 const { getPublishReleaseFunction } = require('../publish-github-release');
 const { parseChangelog } = require('../parser');
 const verifyPackageAndChangelogSync = require('../verify-package-changelog-sync');
@@ -14,7 +15,7 @@ function publishLastChangelogAsReleaseToGithub() {
 
   verifyPackageAndChangelogSync();
 
-  const { version, releaseTitle, releaseDescription } = parseChangelog(shell.cat('CHANGELOG.md'))[0];
+  const { version, releaseTitle, releaseDescription } = parseChangelog(fs.readFileSync('CHANGELOG.md', 'utf8'))[0];
 
   const targetBranch = yargs.argv.branch || 'master';
 

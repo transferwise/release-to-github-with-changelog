@@ -1,3 +1,7 @@
+# v1.1.5
+## Remove dependency on jq
+Only use `shelljs` for `exit` and `exec`
+
 # v1.1.4
 ## Allow several digits versions parts
 Fixes issue 14

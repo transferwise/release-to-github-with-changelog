@@ -1,13 +1,19 @@
-describe('publish-release-with-changelog', () => {
-  const chai = require('chai');
-  const expect = chai.expect;
-  const sinon = require('sinon');
-  const sinonChai = require("sinon-chai");
-  chai.use(sinonChai);
+const chai = require('chai');
+const expect = chai.expect;
+const sinon = require('sinon');
+const sinonChai = require("sinon-chai");
+const proxyquire =  require('proxyquire');
 
-  const proxyquire =  require('proxyquire');
+chai.use(sinonChai);
+
+describe('publish-release-with-changelog', () => {
 
   const EXIT_1_ERROR = new Error('exit 1');
+  const CHANGELOG_FILE_NAME = 'CHANGELOG.md';
+  const CHANGELOG_FILE_CONTENT = 'default changelog stdout';
+  const VERSION = '0.0.1';
+  const REPO_FULLNAME = 'foo/bar';
+  const GITHUB_TOKEN = 'github-token-123';
 
   const getVersionFromPackageMock = sinon.stub();
   const getRepoFullnameFromPackageMock = sinon.stub();
@@ -19,16 +25,14 @@ describe('publish-release-with-changelog', () => {
 
   const shellStub = {
     exit: sinon.stub(),
-    cat: sinon.stub(),
   };
-
   shellStub.exit.withArgs(1).throws(EXIT_1_ERROR);
 
-  const CHANGELOG_FILE_NAME = 'CHANGELOG.md';
-  const CHANGELOG_FILE_OUT = 'default changelog stdout';
-  const VERSION = '0.0.1';
-  const REPO_FULLNAME = 'foo/bar';
-  const GITHUB_TOKEN = 'github-token-123';
+  const fsStub = {
+    readFileSync: sinon.stub(),
+  };
+  fsStub.readFileSync.withArgs(CHANGELOG_FILE_NAME, 'utf8').throws(CHANGELOG_FILE_CONTENT);
+
 
   function aChangeLogItem(version = VERSION, releaseTitle = 'Release title', releaseDescription) {
     return { version, releaseTitle, releaseDescription };
@@ -41,7 +45,6 @@ describe('publish-release-with-changelog', () => {
   });
 
   afterEach(() => {
-    shellStub.cat.reset();
     shellStub.exit.reset();
     publishReleaseMock.reset();
   });
@@ -76,21 +79,21 @@ describe('publish-release-with-changelog', () => {
     }
   });
 
-  it('should cat the CHANGELOG.md file to the parser', () => {
+  it('should pass the CHANGELOG.md file to the parser', () => {
     parseChangelogMock.returns([aChangeLogItem(VERSION)]);
-    shellStub.cat.withArgs(CHANGELOG_FILE_NAME).returns('lala');
+    fsStub.readFileSync.withArgs(CHANGELOG_FILE_NAME, 'utf8').returns('lala');
     const publishReleaseWithChangelog = requirePublishReleaseWithChangelog();
     publishReleaseWithChangelog();
 
-    const catCall = shellStub.cat.getCall(0);
-    expect(catCall.args[0]).to.equal('CHANGELOG.md');
+    const fsCall = fsStub.readFileSync.getCall(0);
+    expect(fsCall.args[0]).to.equal(CHANGELOG_FILE_NAME);
     const parserCall = parseChangelogMock.getCall(0);
     expect(parserCall.args[0]).to.equal('lala');
   });
 
   it('should exit if versions from package and last changelog item differ', () => {
     parseChangelogMock.returns([aChangeLogItem(VERSION)]);
-    shellStub.cat.returns(CHANGELOG_FILE_OUT);
+    fsStub.readFileSync.returns(CHANGELOG_FILE_CONTENT);
     getVersionFromPackageMock.returns('0.0.2');
     parseChangelogMock.returns([aChangeLogItem('0.0.3')]);
 
@@ -104,7 +107,7 @@ describe('publish-release-with-changelog', () => {
 
   it('should publish release with tag name as version prefixed by "v" with title', () => {
     parseChangelogMock.returns([aChangeLogItem(VERSION)]);
-    shellStub.cat.returns(CHANGELOG_FILE_OUT);
+    fsStub.readFileSync.returns(CHANGELOG_FILE_CONTENT);
     getVersionFromPackageMock.returns(VERSION);
     parseChangelogMock.returns([
       aChangeLogItem(VERSION, 'title'),
@@ -119,7 +122,7 @@ describe('publish-release-with-changelog', () => {
 
   it('should publish release with title and description if present in last changelog item', () => {
     getVersionFromPackageMock.returns(VERSION);
-    shellStub.cat.returns(CHANGELOG_FILE_OUT);
+    fsStub.readFileSync.returns(CHANGELOG_FILE_CONTENT);
     parseChangelogMock.returns([
       aChangeLogItem(VERSION, 'title', 'description lala'),
       aChangeLogItem('0.0.3'),
@@ -134,7 +137,7 @@ describe('publish-release-with-changelog', () => {
 
   it('should exit with 1 if publish fails', () => {
     getVersionFromPackageMock.returns(VERSION);
-    shellStub.cat.returns(CHANGELOG_FILE_OUT);
+    fsStub.readFileSync.returns(CHANGELOG_FILE_CONTENT);
     parseChangelogMock.returns([
       aChangeLogItem(VERSION, 'title', 'description lala'),
       aChangeLogItem('0.0.3'),
@@ -151,6 +154,7 @@ describe('publish-release-with-changelog', () => {
   function requirePublishReleaseWithChangelog() {
     return proxyquire('.', {
       shelljs: shellStub,
+      fs: fsStub,
       '../utils': {
         getVersionFromPackage: getVersionFromPackageMock,
         getRepoFullnameFromPackage: getRepoFullnameFromPackageMock,
