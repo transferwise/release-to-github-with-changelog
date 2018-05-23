@@ -2,12 +2,9 @@ function parseChangelogItem(item) {
   const regex = /#\s?(v\d+\.\d+\.?\d*(-(beta|alpha|rc)\.\d+)?)\n##\s?(.*)([\s\S]*)/g;
   const match = regex.exec(item);
 
-  const tagName = match[1];
-  const releaseTitle = match[4];
-  const description = match[5];
+  const { 1: tagName, 2: prereleasePart, 4: releaseTitle, 5: description } = match;
   const releaseDescription = description.trim();
-
-  const preRelease = !!match[2];
+  const prerelease = !!prereleasePart;
 
   if (!tagName || !releaseTitle) throw new Error(BADLY_FORMATTED_CHANGELOG);
 
@@ -17,7 +14,7 @@ function parseChangelogItem(item) {
     version,
     releaseTitle,
     releaseDescription,
-    preRelease,
+    prerelease,
   };
 }
 

@@ -34,8 +34,8 @@ describe('publish-release-with-changelog', () => {
   fsStub.readFileSync.withArgs(CHANGELOG_FILE_NAME, 'utf8').throws(CHANGELOG_FILE_CONTENT);
 
 
-  function aChangeLogItem(version = VERSION, releaseTitle = 'Release title', releaseDescription, preRelease) {
-    return { version, releaseTitle, releaseDescription, preRelease };
+  function aChangeLogItem(version = VERSION, releaseTitle = 'Release title', releaseDescription, prerelease) {
+    return { version, releaseTitle, releaseDescription, prerelease };
   }
 
   beforeEach(() => {
