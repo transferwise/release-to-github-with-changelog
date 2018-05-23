@@ -1,8 +1,10 @@
 function parseChangelogItem(item) {
-  const regex =  /#\s?(v\d+\.\d+\.?\d*)\n##\s?(.*)([\s\S]*)/g;
+  const regex = /#\s?(v\d+\.\d+\.?\d*(-(beta|alpha|rc)\.\d+)?)\n##\s?(.*)([\s\S]*)/g;
   const match = regex.exec(item);
 
-  const [tagName, releaseTitle, description] = match.slice(1,4);
+  const tagName = match[1];
+  const releaseTitle = match[4];
+  const description = match[5];
   const releaseDescription = description.trim();
 
   if (!tagName || !releaseTitle) throw new Error(BADLY_FORMATTED_CHANGELOG);
@@ -30,16 +32,16 @@ function parseChangelog(stdOut) {
 }
 
 function getItemsAsStrings(changelog) {
-  let items = [];
+  const items = [];
 
-  let regexMatches = getRegexMatchesForChangelogItems(changelog);
+  const regexMatches = getRegexMatchesForChangelogItems(changelog);
 
   if (regexMatches.length < 1) throw new Error(BADLY_FORMATTED_CHANGELOG);
 
   for (let i = 0; i < regexMatches.length; i++) {
     const match = regexMatches[i];
     if (i < regexMatches.length - 1) {
-      const nextMatch = regexMatches[i+1];
+      const nextMatch = regexMatches[i + 1];
       items.push(changelog.substring(match.index, nextMatch.index));
     } else {
       items.push(changelog.substring(match.index));
@@ -52,7 +54,7 @@ function getItemsAsStrings(changelog) {
 function getRegexMatchesForChangelogItems(changelog) {
   const itemVersionRegex = /#\s?(v\d+\.\d+\.?\d*)/g;
   let match;
-  let regexMatches = [];
+  const regexMatches = [];
   while ((match = itemVersionRegex.exec(changelog)) !== null) {
     regexMatches.push(match);
   }
