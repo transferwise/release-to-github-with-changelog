@@ -77,7 +77,7 @@ describe('getPublishReleaseFunction', () => {
         });
     });
 
-    it('should run a pre-release instead if preRelease provided', () => {
+    it('should run a pre-release instead if prerelease provided', () => {
       const releaseDescription = 'Wonderful description';
       const expectedReleaseResourceCmd = {
         tag_name: `v${VERSION}`,
