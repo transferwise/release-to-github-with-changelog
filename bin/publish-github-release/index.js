@@ -12,7 +12,7 @@ class GithubReleaseClient {
     this.branch = branch || 'master';
   }
 
-  publishRelease(version, releaseTitle, releaseDescription) {
+  publishRelease(version, releaseTitle, releaseDescription, preRelease) {
     if (!version) {
       return Promise.reject('Please specify a version for the release to publish');
     }
@@ -23,6 +23,7 @@ class GithubReleaseClient {
 
     const releaseResourceCmd = formGithubReleaseResource({
       version,
+      preRelease,
       title: releaseTitle,
       description: releaseDescription,
       branch: this.branch,
@@ -53,7 +54,7 @@ function getReleasesUri(repoFullname) {
   return [GITHUB_REPOS_URI, repoFullname, 'releases'].join('/');
 }
 
-function formGithubReleaseResource({ version, title, description, branch }) {
+function formGithubReleaseResource({ version, title, description, branch, preRelease }) {
   const releaseResource = {
     tag_name: version.indexOf('v') < 0 ? `v${version}` : version,
     target_commitish: branch,
@@ -62,13 +63,16 @@ function formGithubReleaseResource({ version, title, description, branch }) {
   if (description) {
     releaseResource.body = description;
   }
+  if (preRelease !== undefined) {
+    releaseResource.prerelease = preRelease;
+  }
   return releaseResource;
 }
 
 function getPublishReleaseFunction(repoFullname, token, branch) {
   const githubReleaseClient = new GithubReleaseClient(repoFullname, token, branch);
-  return (version, releaseTitle, releaseDescription) => (
-    githubReleaseClient.publishRelease(version, releaseTitle, releaseDescription)
+  return (version, releaseTitle, releaseDescription, preRelease) => (
+    githubReleaseClient.publishRelease(version, releaseTitle, releaseDescription, preRelease)
   );
 }
 

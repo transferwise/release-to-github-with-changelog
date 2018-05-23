@@ -76,6 +76,28 @@ describe('getPublishReleaseFunction', () => {
           expect(httpExpect.isDone()).to.equal(true);
         });
     });
+
+    it('should run a pre-release instead if preRelease provided', () => {
+      const releaseDescription = 'Wonderful description';
+      const expectedReleaseResourceCmd = {
+        tag_name: `v${VERSION}`,
+        target_commitish: 'master',
+        name: RELEASE_TITLE,
+        body: releaseDescription,
+        prerelease: true,
+      };
+
+      const httpExpect = nock(GITHUB_REPOS_URI)
+        .post(`/${REPO_FULLNAME}/releases`, expectedReleaseResourceCmd)
+        .reply(200, {
+          id: '123ABC',
+        });
+
+      return publishRelease(VERSION, RELEASE_TITLE, releaseDescription, true)
+        .then(() => {
+          expect(httpExpect.isDone()).to.equal(true);
+        });
+    });
   });
 
   describe('publishRelease for branch', () => {

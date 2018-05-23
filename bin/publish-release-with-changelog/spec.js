@@ -1,13 +1,13 @@
 const chai = require('chai');
+
 const expect = chai.expect;
 const sinon = require('sinon');
-const sinonChai = require("sinon-chai");
-const proxyquire =  require('proxyquire');
+const sinonChai = require('sinon-chai');
+const proxyquire = require('proxyquire');
 
 chai.use(sinonChai);
 
 describe('publish-release-with-changelog', () => {
-
   const EXIT_1_ERROR = new Error('exit 1');
   const CHANGELOG_FILE_NAME = 'CHANGELOG.md';
   const CHANGELOG_FILE_CONTENT = 'default changelog stdout';
@@ -34,8 +34,8 @@ describe('publish-release-with-changelog', () => {
   fsStub.readFileSync.withArgs(CHANGELOG_FILE_NAME, 'utf8').throws(CHANGELOG_FILE_CONTENT);
 
 
-  function aChangeLogItem(version = VERSION, releaseTitle = 'Release title', releaseDescription) {
-    return { version, releaseTitle, releaseDescription };
+  function aChangeLogItem(version = VERSION, releaseTitle = 'Release title', releaseDescription, preRelease) {
+    return { version, releaseTitle, releaseDescription, preRelease };
   }
 
   beforeEach(() => {
@@ -133,6 +133,21 @@ describe('publish-release-with-changelog', () => {
 
     expect(publishReleaseMock)
       .to.have.been.calledWith(`v${VERSION}`, 'title', 'description lala');
+  });
+
+  it('should publish a pre-release if the last changelog item is a pre-release', () => {
+    getVersionFromPackageMock.returns(VERSION);
+    fsStub.readFileSync.returns(CHANGELOG_FILE_CONTENT);
+    parseChangelogMock.returns([
+      aChangeLogItem(VERSION, 'title', 'description lala', true),
+      aChangeLogItem('0.0.3'),
+    ]);
+
+    const publishReleaseWithChangelog = requirePublishReleaseWithChangelog();
+    publishReleaseWithChangelog();
+
+    expect(publishReleaseMock)
+      .to.have.been.calledWith(`v${VERSION}`, 'title', 'description lala', true);
   });
 
   it('should exit with 1 if publish fails', () => {

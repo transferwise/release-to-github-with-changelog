@@ -15,7 +15,12 @@ function publishLastChangelogAsReleaseToGithub() {
 
   verifyPackageAndChangelogSync();
 
-  const { version, releaseTitle, releaseDescription } = parseChangelog(fs.readFileSync('CHANGELOG.md', 'utf8'))[0];
+  const {
+    version,
+    releaseTitle,
+    releaseDescription,
+    preRelease,
+  } = parseChangelog(fs.readFileSync('CHANGELOG.md', 'utf8'))[0];
 
   const targetBranch = yargs.argv.branch || 'master';
 
@@ -23,24 +28,26 @@ function publishLastChangelogAsReleaseToGithub() {
 
   if (releaseDescription) {
     return handlePublishReleasePromise(
-      publishRelease(`v${version}`, releaseTitle, releaseDescription),
+      publishRelease(`v${version}`, releaseTitle, releaseDescription, preRelease),
       version,
-      targetBranch);
+      targetBranch,
+      preRelease);
   }
   return handlePublishReleasePromise(
-    publishRelease(`v${version}`, releaseTitle),
+    publishRelease(`v${version}`, releaseTitle, undefined, preRelease),
     version,
-    targetBranch);
+    targetBranch,
+    preRelease);
 }
 
-function handlePublishReleasePromise(promise, version, targetBranch) {
+function handlePublishReleasePromise(promise, version, targetBranch, preRelease) {
   return promise.then(response => {
     console.log(response);
-    console.log(`Succesfully published ${version} release for target ${targetBranch}`.green);
+    console.log(`Succesfully published ${preRelease ? 'pre-release ' : ''}${version} release for target ${targetBranch}`.green);
     shell.exit(0);
   })
   .catch(err => {
-    console.log(`Error when pubishing ${version} release for target ${targetBranch}`.red);
+    console.log(`Error when pubishing ${preRelease ? 'pre-release ' : ''}${version} release for target ${targetBranch}`.red);
     console.log(JSON.stringify(err).red);
     shell.exit(1);
   });
