@@ -7,6 +7,8 @@ function parseChangelogItem(item) {
   const description = match[5];
   const releaseDescription = description.trim();
 
+  const preRelease = !!match[2];
+
   if (!tagName || !releaseTitle) throw new Error(BADLY_FORMATTED_CHANGELOG);
 
   const version = tagName.replace('v', '');
@@ -15,6 +17,7 @@ function parseChangelogItem(item) {
     version,
     releaseTitle,
     releaseDescription,
+    preRelease,
   };
 }
 
