@@ -1,3 +1,7 @@
+# v1.2.0
+## Add support for pre-releases
+Adding a version like "v1.2.3-beta.1" will publish a beta pre-release.
+
 # v1.1.5
 ## Remove dependency on jq
 Only use `shelljs` for `exit` and `exec`
