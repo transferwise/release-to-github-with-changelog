@@ -23,6 +23,7 @@ module.exports = {
     'angular': false,
     'sinon': false,
     'document': false,
+    'mocha':true
   },
   settings: {
     'import/resolver': {
