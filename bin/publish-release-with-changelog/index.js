@@ -1,43 +1,46 @@
 #! /usr/bin/env node
 const fs = require('fs');
 const shell = require('shelljs');
-const colors = require('colors');
+require('colors');
 const yargs = require('yargs');
+const gitRemoteOriginUrl = require('git-remote-origin-url');
 
-const { getRepoFullnameFromPackage } = require('../utils');
+const { getRepoFullnameFromPackage, getRepoFullnameFromGitRemote } = require('../utils');
 const { getPublishReleaseFunction } = require('../publish-github-release');
 const { parseChangelog } = require('../parser');
 const verifyPackageAndChangelogSync = require('../verify-package-changelog-sync');
 
-function publishLastChangelogAsReleaseToGithub() {
-  const repoFullname = getValidRepoFullnameOrExit();
-  const githubToken = getGithubTokenOrExit();
+function publishLastChangelogAsReleaseToGithub(/* { useGitRemoteUrl = false } = {}*/) {
+  const useGitRemoteUrl = yargs.argv.remote;
+  getValidRepoFullnameOrExit(useGitRemoteUrl, repoFullname => {
+    const githubToken = getGithubTokenOrExit();
 
-  verifyPackageAndChangelogSync();
+    verifyPackageAndChangelogSync();
 
-  const {
-    version,
-    releaseTitle,
-    releaseDescription,
-    prerelease,
-  } = parseChangelog(fs.readFileSync('CHANGELOG.md', 'utf8'))[0];
+    const {
+      version,
+      releaseTitle,
+      releaseDescription,
+      prerelease,
+    } = parseChangelog(fs.readFileSync('CHANGELOG.md', 'utf8'))[0];
 
-  const targetBranch = yargs.argv.branch || 'master';
+    const targetBranch = yargs.argv.branch || 'master';
 
-  const publishRelease = getPublishReleaseFunction(repoFullname, githubToken, targetBranch);
+    const publishRelease = getPublishReleaseFunction(repoFullname, githubToken, targetBranch);
 
-  if (releaseDescription) {
+    if (releaseDescription) {
+      return handlePublishReleasePromise(
+        publishRelease(`v${version}`, releaseTitle, releaseDescription, prerelease),
+        version,
+        targetBranch,
+        prerelease);
+    }
     return handlePublishReleasePromise(
-      publishRelease(`v${version}`, releaseTitle, releaseDescription, prerelease),
+      publishRelease(`v${version}`, releaseTitle, undefined, prerelease),
       version,
       targetBranch,
       prerelease);
-  }
-  return handlePublishReleasePromise(
-    publishRelease(`v${version}`, releaseTitle, undefined, prerelease),
-    version,
-    targetBranch,
-    prerelease);
+  });
 }
 
 function handlePublishReleasePromise(promise, version, targetBranch, prerelease) {
@@ -62,13 +65,22 @@ function getGithubTokenOrExit() {
   return token;
 }
 
-function getValidRepoFullnameOrExit() {
+function getValidRepoFullnameOrExit(useGitRemoteUrl, callback) {
+  if (useGitRemoteUrl) {
+    return gitRemoteOriginUrl().then(url => {
+      if (!url) {
+        console.log('This git repository\'s remote url is empty');
+        return shell.exit(1);
+      }
+      return callback(getRepoFullnameFromGitRemote(url));
+    });
+  }
   const repoFullname = getRepoFullnameFromPackage();
   if (!repoFullname || repoFullname.split('/').length !== 2) {
     console.log('Please add your Github repo url under "repository.url" in package.json'.red);
     shell.exit(1);
   }
-  return repoFullname;
+  return callback(repoFullname);
 }
 
 module.exports = publishLastChangelogAsReleaseToGithub;
