@@ -28,6 +28,8 @@
   "homepage": "https://github.com/adriendog/release-to-github-with-changelog#readme",
   "dependencies": {
     "colors": "^1.1.2",
+    "git-remote-origin-url": "^2.0.0",
+    "git-url-parse": "^10.0.1",
     "request": "^2.78.0",
     "request-promise": "^4.1.1",
     "shelljs": "^0.7.0",

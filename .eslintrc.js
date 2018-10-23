@@ -12,6 +12,7 @@ module.exports = {
     'one-var': ['error', {'const': 'never', 'let': 'always'}],
     'one-var-declaration-per-line': ['error', 'initializations'],
     'space-before-function-paren': ['error', 'never'],
+    'no-console' : 0
   },
   globals: {
     'window': false,
@@ -23,6 +24,7 @@ module.exports = {
     'angular': false,
     'sinon': false,
     'document': false,
+    'mocha':true
   },
   settings: {
     'import/resolver': {
