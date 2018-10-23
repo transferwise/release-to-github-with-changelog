@@ -1,3 +1,8 @@
+# v1.2.1
+## Update build and dependencies
+Update build to circle v2 as v1 is deprecated.
+Update dependencies to get rid of some vulnerabilities
+
 # v1.2.0
 ## Add support for pre-releases
 Adding a version like "v1.2.3-beta.1" will publish a beta pre-release.
