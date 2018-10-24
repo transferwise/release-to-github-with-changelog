@@ -26,7 +26,7 @@ jobs:
           at: ~/release-to-github-with-changelog
       - run:
           name: Setup npm token
-          command: echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN_PUBLISH" >> ~/.npmrc
+          command: echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" >> ~/.npmrc
       - run:
           name: Release latest version to production
           command: npm run release
@@ -37,7 +37,6 @@ workflows:
     jobs:
       - test
       - release:
-          context: frontend-publish
           requires:
             - test
           filters:
