@@ -8,9 +8,6 @@ jobs:
     steps:
       - checkout
       - run:
-          name: Setup npm token
-          command: echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN_PUBLISH" >> ~/.npmrc
-      - run:
           name: Install dependencies
           command: npm ci
       - run:
@@ -27,6 +24,9 @@ jobs:
     steps:
       - attach_workspace:
           at: ~/release-to-github-with-changelog
+      - run:
+          name: Setup npm token
+          command: echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN_PUBLISH" >> ~/.npmrc
       - run:
           name: Release latest version to production
           command: npm run release
