@@ -16,6 +16,10 @@ jobs:
       - run:
           name: Run tests
           command: npm test
+      - persist_to_workspace:
+          root: .
+          paths:
+            - '*'
   release:
     working_directory: ~/release-to-github-with-changelog
     docker:
