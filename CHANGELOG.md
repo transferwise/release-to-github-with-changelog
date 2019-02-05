@@ -1,3 +1,6 @@
+# v1.2.2
+## Improve error details when checks fail
+
 # v1.2.1
 ## Update build and dependencies
 Update build to circle v2 as v1 is deprecated.
