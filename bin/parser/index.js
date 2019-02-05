@@ -6,7 +6,7 @@ function parseChangelogItem(item) {
   const releaseDescription = description.trim();
   const prerelease = !!prereleasePart;
 
-  if (!tagName || !releaseTitle) throw new Error(BADLY_FORMATTED_CHANGELOG);
+  if (!tagName || !releaseTitle) throw new Error(badlyFormattedChangelog(`tagName=${tagName},releaseTitle=${releaseTitle}`));
 
   const version = tagName.replace('v', '');
 
@@ -18,16 +18,19 @@ function parseChangelogItem(item) {
   };
 }
 
-const BADLY_FORMATTED_CHANGELOG = `Your CHANGELOG.md seems to be badly formatted.
+const badlyFormattedChangelog = (errorDetails) => `Your CHANGELOG.md seems to be badly formatted.
 Every item should start with:
 # v1.0.0
-## Release title`;
+## Release title
+
+Error details:
+${errorDetails}`;
 
 function parseChangelog(stdOut) {
   try {
     return getItemsAsStrings(stdOut).map(parseChangelogItem);
   } catch (e) {
-    throw new Error(BADLY_FORMATTED_CHANGELOG);
+    throw new Error(badlyFormattedChangelog(e));
   }
 }
 
@@ -36,7 +39,7 @@ function getItemsAsStrings(changelog) {
 
   const regexMatches = getRegexMatchesForChangelogItems(changelog);
 
-  if (regexMatches.length < 1) throw new Error(BADLY_FORMATTED_CHANGELOG);
+  if (regexMatches.length < 1) throw new Error(badlyFormattedChangelog('Unable to find regex matches'));
 
   for (let i = 0; i < regexMatches.length; i++) {
     const match = regexMatches[i];
