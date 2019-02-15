@@ -15,6 +15,13 @@ Keep the released npm package in sync with the GitHub repo master branch:
 ## Usage
 The sources of truth are `CHANGELOG.md` and `package.json`.
 Your interface is your `CHANGELOG.md`.
+
+Usage: release-to-github-with-changelog [options]
+
+Options:
+                                                                                     
+--branch [branchName]         Default is master.             
+--remote [isUseRemoteUrl]  Default is false, if set true, the change log will send to git origin remote url.                                                                                     
 ### CHANGELOG.md
 Every `CHANGELOG.md` item should represent a release note of the version it describes:
 ```
