@@ -160,7 +160,7 @@ describe('publish-release-with-changelog', () => {
     publishReleaseMock.returns(Promise.reject('errorrrrr'));
 
     const publishReleaseWithChangelog = requirePublishReleaseWithChangelog();
-    return publishReleaseWithChangelog().catch(err => {
+    return publishReleaseWithChangelog(err => {
       expect(err).to.equal(EXIT_1_ERROR);
       expect(shellStub.exit).to.have.been.calledWith(1);
     });
