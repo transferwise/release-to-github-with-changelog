@@ -1,6 +1,6 @@
 #! /usr/bin/env node
 const fs = require('fs');
-const gitUrlParse = require("git-url-parse");
+const gitUrlParse = require('git-url-parse');
 
 module.exports = {
   extractEnv,
@@ -24,13 +24,8 @@ function extractEnv(envFile) {
 
 function getRepoFullnameFromPackage() {
   const repoUrl = getPackageJson().repository.url;
-  const urlAsArray = repoUrl.split('/');
-  const indexOfGithubDomain = urlAsArray.findIndex(el => el.indexOf('github.com') > -1);
-
-  const ownerName = urlAsArray[indexOfGithubDomain + 1];
-  const repoName = urlAsArray[indexOfGithubDomain + 2].split('.')[0];
-
-  return `${ownerName}/${repoName}`;
+  const info = gitUrlParse(repoUrl);
+  return `${info.owner}/${info.name}`;
 }
 
 function getRepoFullnameFromGitRemote(url) {
