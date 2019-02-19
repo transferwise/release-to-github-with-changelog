@@ -1,5 +1,5 @@
 function parseChangelogItem(item) {
-  const regex = /#\s?(v\d+\.\d+\.?\d*(-(beta|alpha|rc)\.\d+)?)\r?\n##\s?(.*)([\s\S]*)/g;
+  const regex = /#\s?(v\d+\.\d+\.?\d*(-(beta|alpha|rc)\.\d+)?)\s*\r?\n##\s?(.*)([\s\S]*)/g;
   const match = regex.exec(item);
 
   const { 1: tagName, 2: prereleasePart, 4: releaseTitle, 5: description } = match;
@@ -38,6 +38,7 @@ function getItemsAsStrings(changelog) {
 
   if (regexMatches.length < 1) throw new Error(BADLY_FORMATTED_CHANGELOG);
 
+  // eslint-disable-next-line no-plusplus
   for (let i = 0; i < regexMatches.length; i++) {
     const match = regexMatches[i];
     if (i < regexMatches.length - 1) {

@@ -5,6 +5,7 @@ module.exports = {
     'class-methods-use-this': ['warn'],
     'import/prefer-default-export' : 1,
     'import/no-named-as-default': 1,
+    "import/no-extraneous-dependencies": ["error", {"devDependencies": true}],
     'max-len': ['warn', 120],
     'no-param-reassign': [2, { props: false }],
     'no-restricted-syntax': ['off', 'FunctionExpression', 'WithStatement'],
