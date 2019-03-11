@@ -1,12 +1,18 @@
 function parseChangelogItem(item) {
   const regex = /#\s?(v\d+\.\d+\.?\d*(-(beta|alpha|rc)\.\d+)?)\s*\r?\n##\s?(.*)([\s\S]*)/g;
   const match = regex.exec(item);
-
+  if (!match) {
+    console.error('invalid item', item);
+    return null;
+  }
   const { 1: tagName, 2: prereleasePart, 4: releaseTitle, 5: description } = match;
   const releaseDescription = description.trim();
   const prerelease = !!prereleasePart;
 
-  if (!tagName || !releaseTitle) throw new Error(BADLY_FORMATTED_CHANGELOG);
+  if (!tagName || !releaseTitle) {
+    console.error('invalid item', item);
+    return null;
+  }
 
   const version = tagName.replace('v', '');
 
@@ -18,17 +24,13 @@ function parseChangelogItem(item) {
   };
 }
 
-const BADLY_FORMATTED_CHANGELOG = `Your CHANGELOG.md seems to be badly formatted.
-Every item should start with:
-# v1.0.0
-## Release title`;
+// const BADLY_FORMATTED_CHANGELOG = `Your CHANGELOG.md seems to be badly formatted.
+// Every item should start with:
+// # v1.0.0
+// ## Release title`;
 
 function parseChangelog(stdOut) {
-  try {
-    return getItemsAsStrings(stdOut).map(parseChangelogItem);
-  } catch (e) {
-    throw new Error(BADLY_FORMATTED_CHANGELOG);
-  }
+  return getItemsAsStrings(stdOut).map(parseChangelogItem);
 }
 
 function getItemsAsStrings(changelog) {
@@ -36,7 +38,11 @@ function getItemsAsStrings(changelog) {
 
   const regexMatches = getRegexMatchesForChangelogItems(changelog);
 
-  if (regexMatches.length < 1) throw new Error(BADLY_FORMATTED_CHANGELOG);
+  if (regexMatches.length < 1) {
+    // throw new Error(BADLY_FORMATTED_CHANGELOG);
+    console.error('none changelog item');
+    return [];
+  }
 
   // eslint-disable-next-line no-plusplus
   for (let i = 0; i < regexMatches.length; i++) {
