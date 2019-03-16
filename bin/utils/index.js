@@ -1,6 +1,6 @@
 #! /usr/bin/env node
 const fs = require('fs');
-const gitUrlParse = require('git-url-parse');
+const gitUrlParse = require('hosted-git-info');
 
 module.exports = {
   extractEnv,
@@ -24,13 +24,13 @@ function extractEnv(envFile) {
 
 function getRepoFullnameFromPackage() {
   const repoUrl = getPackageJson().repository.url;
-  const info = gitUrlParse(repoUrl);
-  return `${info.owner}/${info.name}`;
+  const info = gitUrlParse.fromUrl(repoUrl);
+  return `${info.user}/${info.project}`;
 }
 
 function getRepoFullnameFromGitRemote(url) {
-  const info = gitUrlParse(url);
-  return `${info.owner}/${info.name}`;
+  const info = gitUrlParse.fromUrl(url);
+  return `${info.user}/${info.project}`;
 }
 
 function getVersionFromPackage() {
