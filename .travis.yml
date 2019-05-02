@@ -1,0 +1,17 @@
+language: node_js
+
+#before_script: 
+
+#script:
+
+
+node_js:
+  - '10'
+  - '9'
+  - '8'
+  - '7'
+  - '6'
+
+cache:
+  directories:
+    - "node_modules"

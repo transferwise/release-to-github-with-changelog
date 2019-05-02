@@ -1,11 +1,11 @@
 {
-  "name": "release-to-github-with-changelog",
-  "version": "1.2.0",
+  "name": "release2hub",
+  "version": "2.0.0",
   "description": "Parses CHANGELOG.md to publish a new release resource to the Github api",
-  "main": "index.js",
+  "main": "bin/index.js",
   "bin": {
-    "release-to-github-with-changelog": "bin/index.js",
-    "release-to-github-with-changelog-pre-release-checks": "bin/pre-release-checks.js"
+    "release2hub": "bin/index.js",
+    "release-check4hub": "bin/pre-release-checks.js"
   },
   "scripts": {
     "test": "mocha bin/**/*spec.js",
@@ -13,19 +13,19 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/transferwise/release-to-github-with-changelog.git"
+    "url": "git+https://github.com/yunnysunny/release2hub"
   },
   "keywords": [
     "npm",
     "release",
     "github"
   ],
-  "author": "adrienDog",
-  "license": "ISC",
+  "author": "yunnysunny",
+  "license": "MIT",
   "bugs": {
-    "url": "https://github.com/adriendog/release-to-github-with-changelog/issues"
+    "url": "https://github.com/yunnysunny/release2hub"
   },
-  "homepage": "https://github.com/adriendog/release-to-github-with-changelog#readme",
+  "homepage": "https://github.com/yunnysunny/release2hub#readme",
   "dependencies": {
     "colors": "^1.1.2",
     "git-remote-origin-url": "^2.0.0",

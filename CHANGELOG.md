@@ -1,3 +1,7 @@
+# v2.0.0
+## Impove
+Shortening the name of CLI.
+
 # v1.2.0
 ## Add support for pre-releases
 Adding a version like "v1.2.3-beta.1" will publish a beta pre-release.

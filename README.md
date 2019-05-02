@@ -1,11 +1,22 @@
-# release-to-github-with-changelog
-[![CircleCI](https://circleci.com/gh/adrienDog/release-to-github-with-changelog.svg?style=shield&circle-token=:9f1c74e21caa562c5e012b5a781d0ce4d15812d2)](https://circleci.com/gh/adrienDog/release-t--github-with-changelog)
+# release2hub
 
-[![npm version](https://badge.fury.io/js/release-to-github-with-changelog.svg)](https://badge.fury.io/js/release-to-github-with-changelog)
+[![build status][travis-image]][travis-url]
+[![David deps][david-image]][david-url]
+[![node version][node-image]][node-url]
 
-*Node v6.9.1 is required*
+[npm-url]: https://npmjs.org/package/release2hub
+[travis-image]: https://img.shields.io/travis/yunnysunny/release2hub.svg?style=flat-square
+[travis-url]: https://travis-ci.org/yunnysunny/release2hub
+[david-image]: https://img.shields.io/david/yunnysunny/release2hub.svg?style=flat-square
+[david-url]: https://david-dm.org/yunnysunny/release2hub
+[node-image]: https://img.shields.io/badge/node.js-%3E=_6-green.svg?style=flat-square
+[node-url]: http://nodejs.org/download/
+
+[![NPM](https://nodei.co/npm/release2hub.png?downloads=true)](https://nodei.co/npm/node-release2hub/) 
 
 ## Goal
+The origin project is hosted on [transferwise/release-to-github-with-changelog](https://github.com/transferwise/release-to-github-with-changelog), this project is an enhancement of the original, adding some features, such as the support of Windows.
+
 Keep the released npm package in sync with the GitHub repo master branch:
 - the last `CHANGELOG.md` item is in sync with the last release on Github, with corresponding version tag
 - the `package.json` version is in sync with the `master` branch version tag
@@ -13,16 +24,23 @@ Keep the released npm package in sync with the GitHub repo master branch:
 ![alt tag](img/changelog_releases_sync.png)
 
 ## Usage
+
+### The usage of CLI 
+#### release2hub
 The sources of truth are `CHANGELOG.md` and `package.json`.
 Your interface is your `CHANGELOG.md`.
 
-Usage: release-to-github-with-changelog [options]
+Usage: release2hub [options]
 
 Options:
                                                                                      
 --branch [branchName]         Default is master.             
---remote [isUseRemoteUrl]  Default is false, if set true, the change log will send to git origin remote url.                                                                                     
-### CHANGELOG.md
+--remote [isUseRemoteUrl]  Default is false, if set true, the change log will send to git origin remote url, otherwise, it will use the field of `repository.url` form package.json.
+
+#### release-check4hub
+You can include a check of your `CHANGELOG.md` format in your test command by using the provided `release-check4hub` command.
+
+### The usage of CHANGELOG.md
 Every `CHANGELOG.md` item should represent a release note of the version it describes:
 ```
 # v0.2.0 //version tag
@@ -32,7 +50,31 @@ Every `CHANGELOG.md` item should represent a release note of the version it desc
 # v0.1.9
 ...
 ```
-#### Full example:
+
+
+## Example
+### Example of package.json
+> Don't forget the `repository.url`. It will be parsed to extract the repository full name (`myOrg/myRepo` in this example).
+
+```json
+{
+  "version": "0.2.0",
+  "respository": {
+    "type": "git",
+    "url": "git+https://github.com/myOrg/myRepo.git"
+  },
+  "files": ["dist"],
+  "scripts": {
+    "build": // build dist files
+    "release": "npm publish && npm run release2hub",
+    "release": "npm publish && npm run release2hub --branch=releases", // optional branch name
+    "test": "release-check4hub && karma start"
+  }
+}
+```
+
+### Example of CHANGELOG.md
+
 ```
 # v0.2.0
 ## We can fly
@@ -45,41 +87,7 @@ It can move, a bit slowly but still it moves.
 
 //...
 ```
-### Export a GITHUB_TOKEN env variable
-Either locally with `export GITHUB_TOKEN=$yourToken` or in your CI tool settings (see CircleCI example).
 
-### Example of package.json
-Don't forget the `repository.url`. It will be parsed to extract the repository full name (`myOrg/myRepo` in this example).
-#### Test tool
-You can include a check of your `CHANGELOG.md` format in your test command by using the provided `release-to-github-with-changelog-pre-release-checks` command.
-```
-{
-  "version": "0.2.0",
-  "respository": {
-    "type": "git",
-    "url": "git+https://github.com/myOrg/myRepo.git"
-  },
-  "files": ["dist"],
-  "scripts": {
-    "build": // build dist files
-    "release": "npm publish && npm run release-to-github-with-changelog",
-    "release": "npm publish && npm run release-to-github-with-changelog --branch=releases", // optional branch name
-    "test": "release-to-github-with-changelog-pre-release-checks && karma start"
-  }
-}
-```
-## CI example
-`circle.yml`
-```
-machine:
-  node:
-    version: 4.1.0
-dependencies:
-  pre:
-    - echo -e "$NPM_USER\n$NPM_PASS\n$NPM_EMAIL" | npm login
-deployment:
-  production:
-    branch: master
-    commands:
-      - npm run release
-```
+## LICENSE
+
+[MIT](LICENSE)
