@@ -1,3 +1,7 @@
+# v1.2.4
+
+## Fix build
+
 # v1.2.3
 
 ## Allow multiple newlines between tagName and releaseTitle to account for Prettier rule
