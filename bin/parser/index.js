@@ -1,5 +1,5 @@
 function parseChangelogItem(item) {
-  const regex = /#\s?(v\d+\.\d+\.?\d*(-(beta|alpha|rc)\.\d+)?)\n##\s?(.*)([\s\S]*)/g;
+  const regex = /#\s?(v\d+\.\d+\.?\d*(-(beta|alpha|rc)\.\d+)?)\n+##\s?(.*)([\s\S]*)/g;
   const match = regex.exec(item);
 
   const { 1: tagName, 2: prereleasePart, 4: releaseTitle, 5: description } = match;

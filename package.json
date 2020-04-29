@@ -1,6 +1,6 @@
 {
   "name": "release-to-github-with-changelog",
-  "version": "1.2.2",
+  "version": "1.2.3",
   "description": "Parses CHANGELOG.md to publish a new release resource to the Github api",
   "main": "index.js",
   "bin": {
@@ -34,14 +34,15 @@
     "yargs": "^12.0.2"
   },
   "devDependencies": {
+    "@transferwise/eslint-config": "^6.0.0",
     "chai": "^3.5.0",
     "eslint": "^3.10.2",
-    "eslint-config-airbnb-base": "^10.0.1",
     "eslint-plugin-import": "^2.2.0",
     "mocha": "^5.2.0",
     "nock": "^9.0.2",
     "proxyquire": "^1.7.10",
     "sinon": "^1.17.4",
     "sinon-chai": "^2.8.0"
-  }
+  },
+  "prettier": "@transferwise/eslint-config/.prettierrc.js"
 }
