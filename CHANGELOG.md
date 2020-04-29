@@ -1,3 +1,7 @@
+# v1.2.3
+
+## Allow multiple newlines between tagName and releaseTitle to account for Prettier rule
+
 # v1.2.2
 
 ## Improve error details when checks fail
