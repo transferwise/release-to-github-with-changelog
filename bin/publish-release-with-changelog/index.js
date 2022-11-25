@@ -47,7 +47,7 @@ function handlePublishReleasePromise(promise, version, targetBranch, prerelease)
     shell.exit(0);
   })
   .catch(err => {
-    console.log(`Error when pubishing ${prerelease ? 'pre-release ' : ''}${version} release for target ${targetBranch}`.red);
+    console.log(`Error when publishing ${prerelease ? 'pre-release ' : ''}${version} release for target ${targetBranch}`.red);
     console.log(JSON.stringify(err).red);
     shell.exit(1);
   });
