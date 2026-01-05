@@ -44,5 +44,8 @@
     "sinon": "^1.17.4",
     "sinon-chai": "^2.8.0"
   },
-  "prettier": "@transferwise/eslint-config/.prettierrc.js"
+  "prettier": "@transferwise/eslint-config/.prettierrc.js",
+  "engines": {
+    "node": "^24"
+  }
 }
